@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,14 +8,25 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
-
+	
   <ItemGroup>
+	<Protobuf Include="Protos\*.proto" ProtoRoot="Protos" GrpcServices="None" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	<PackageReference Include="Google.Protobuf" Version="3.21.11" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
+    <PackageReference Include="Dapr.Client" Version="1.9.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
+	<PackageReference Include="Grpc.Net.Client" Version="2.50.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.51.0" PrivateAssets="All" />
+	 <PackageReference Include="Google.Api.CommonProtos" Version="2.7.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Application\Core.Application\Core.Application.csproj" />
   </ItemGroup>

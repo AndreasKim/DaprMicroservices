@@ -26,11 +26,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "TestProject
 		{170CF4B9-049D-4430-9860-9B15C56F6E57} = {170CF4B9-049D-4430-9860-9B15C56F6E57}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsService", "src\Services\ProductsService\ProductsService.csproj", "{52BEE1EA-05B5-42FC-AC16-110889009405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.ProductsService", "src\Services\ProductsService\Services.ProductsService.csproj", "{52BEE1EA-05B5-42FC-AC16-110889009405}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Infrastructure", "src\Core\Infrastructure\Core.Infrastructure\Core.Infrastructure.csproj", "{6593F106-1C1E-4748-AC74-2B03E5C35600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Infrastructure", "src\Core\Infrastructure\Core.Infrastructure\Core.Infrastructure.csproj", "{6593F106-1C1E-4748-AC74-2B03E5C35600}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "src\Core\Domain\Core.Domain\Core.Domain.csproj", "{38F506A2-DC31-427A-AE68-AEAC485CCD8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "src\Core\Domain\Core.Domain\Core.Domain.csproj", "{38F506A2-DC31-427A-AE68-AEAC485CCD8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD8EF746-D6FE-465E-8275-011E4FFCD53A}"
+	ProjectSection(SolutionItems) = preProject
+		pubsub.yaml = pubsub.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

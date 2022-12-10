@@ -5,9 +5,9 @@ using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
 
-namespace ProductsService.Commands;
+namespace Services.ProductsService.Application.Commands;
 
-public record UpdateProductCommand : IRequest<Product>, IMapTo<Product>
+public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
 {
     public long Id { get; set; }
     public int VendorId { get; set; }
@@ -29,8 +29,9 @@ public record UpdateProductCommand : IRequest<Product>, IMapTo<Product>
     }
 }
 
-public class UpdateProductCommandHandler : UpdateCommandHandler<Product, UpdateProductCommand>
+public class DeleteProductCommandHandler : DeleteCommandHandler<Product, DeleteProductCommand>
 {
-    public UpdateProductCommandHandler(IRepository<Product> repository, IMapper mapper)
-        : base(repository, mapper) { }
+    public DeleteProductCommandHandler(IRepository<Product> repository, IMapper mapper) : base(repository, mapper)
+    {
+    }
 }

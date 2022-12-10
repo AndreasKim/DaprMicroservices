@@ -1,11 +1,13 @@
-﻿using Core.Application.Common.Interfaces;
+﻿using AutoMapper;
+using Core.Application.Common.Interfaces;
+using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
-using ProductsService.Specifications;
+using Services.ProductsService.Application.Specifications;
 
-namespace ProductsService.Queries;
+namespace Services.ProductsService.Application.Queries;
 
-public record GetProductsQuery : IRequest<List<Product>>
+public record GetProductsQuery : IRequest<List<Product>>, IMapTo<ProductsFilter>
 {
     public int Amount { get; set; }
     public bool IsTrending { get; set; }
@@ -19,23 +21,17 @@ public record GetProductsQuery : IRequest<List<Product>>
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Product>>
 {
     private readonly IRepository<Product> _repository;
-    public GetProductsQueryHandler(IRepository<Product> repository)
+    private readonly IMapper _mapper;
+
+    public GetProductsQueryHandler(IRepository<Product> repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     public async Task<List<Product>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
-        var filter = new ProductsFilter()
-        {
-            ActivePage = request.ActivePage,
-            SubCategory = request.SubCategory,
-            VendorId = request.VendorId,
-            Amount = request.Amount,
-            City = request.City,
-            IsTrending = request.IsTrending,
-            ProductsPerPage = request.ProductsPerPage,
-        };
+        var filter = _mapper.Map<ProductsFilter>(request);
 
         return await _repository.ListAsync(new ProductsSpecification(filter), cancellationToken);
     }

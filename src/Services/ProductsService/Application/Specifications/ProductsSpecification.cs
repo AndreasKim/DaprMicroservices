@@ -3,7 +3,7 @@ using Core.Domain.Entities;
 using Core.Application.Common.Helpers;
 using Core.Application.Common.Models;
 
-namespace ProductsService.Specifications;
+namespace Services.ProductsService.Application.Specifications;
 
 public class ProductsFilter : BaseFilter
 {

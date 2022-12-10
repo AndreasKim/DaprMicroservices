@@ -5,9 +5,9 @@ using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
 
-namespace ProductsService.Commands;
+namespace Services.ProductsService.Application.Commands;
 
-public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
+public record UpdateProductCommand : IRequest<Product>, IMapTo<Product>
 {
     public long Id { get; set; }
     public int VendorId { get; set; }
@@ -25,12 +25,13 @@ public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UpdateProductCommand, Product>()
-            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now));
+            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now))
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }
 
-public class DeleteProductCommandHandler : DeleteCommandHandler<Product, DeleteProductCommand>
+public class UpdateProductCommandHandler : UpdateCommandHandler<Product, UpdateProductCommand>
 {
-    public DeleteProductCommandHandler(IRepository<Product> repository, IMapper mapper)
+    public UpdateProductCommandHandler(IRepository<Product> repository, IMapper mapper)
         : base(repository, mapper) { }
 }

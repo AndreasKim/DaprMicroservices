@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using Core.Domain.Entities;
 
-namespace ProductsService.Specifications;
+namespace Services.ProductsService.Application.Specifications;
 
 public class ProductFilter
 {

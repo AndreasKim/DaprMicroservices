@@ -5,7 +5,7 @@ using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using Core.Application.Commands;
 
-namespace ProductsService.Commands;
+namespace Services.ProductsService.Application.Commands;
 
 
 public record CreateProductCommand : IRequest<Product>, IMapTo<Product>

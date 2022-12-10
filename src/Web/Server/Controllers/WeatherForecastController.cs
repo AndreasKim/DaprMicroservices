@@ -1,7 +1,7 @@
-using Core.Application.CRUD.Commands;
 using DaprMicroservices.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Services.ProductsService.Commands;
 
 namespace DaprMicroservices.Server.Controllers
 {
