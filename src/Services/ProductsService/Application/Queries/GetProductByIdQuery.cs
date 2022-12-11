@@ -3,6 +3,7 @@ using Core.Application.Common.Interfaces;
 using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
+using Services.ProductsService.Application.Commands;
 using Services.ProductsService.Application.Specifications;
 
 namespace Services.ProductsService.Application.Queries;

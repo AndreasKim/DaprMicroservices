@@ -99,6 +99,7 @@ namespace Core.Application.Common.Models
         public override async Task<InvokeResponse> OnInvoke(InvokeRequest request, ServerCallContext context)
         {
             var response = new InvokeResponse();
+            _logger.LogInformation($"Incoming invoke request for: {request.Method}");
             if (InvokeHandlers.TryGetValue(request.Method, out var handler)) 
             {
                 await handler.Invoke(request, context, response);

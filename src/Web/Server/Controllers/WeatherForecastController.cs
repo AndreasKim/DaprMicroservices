@@ -1,10 +1,7 @@
-using Dapr.Client;
 using DaprMicroservices.Shared;
-using GrpcServiceSample.Generated;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.ProductsService.Application.Commands;
-using System.Threading;
 
 namespace DaprMicroservices.Server.Controllers
 {
@@ -29,9 +26,7 @@ namespace DaprMicroservices.Server.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            using var client = new DaprClientBuilder().Build();
-            var deposit = new GrpcServiceSample.Generated.GetAccountRequest() { Id = "17"};
-            var account = client.InvokeMethodGrpcAsync<GrpcServiceSample.Generated.GetAccountRequest, Account>("products", "getaccount", deposit, new CancellationToken()).Result;
+            var result = sender.Send(new CreateProductCommand()).Result;
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

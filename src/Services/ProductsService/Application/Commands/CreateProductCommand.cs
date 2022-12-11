@@ -1,9 +1,9 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
+using Core.Application.Commands;
 using Core.Application.Common.Interfaces;
 using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
-using Core.Application.Commands;
+using MediatR;
 
 namespace Services.ProductsService.Application.Commands;
 

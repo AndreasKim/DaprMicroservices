@@ -1,8 +1,10 @@
 using Core.Application;
 using Core.Infrastructure;
+using Google.Api;
 using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.WebHost.ConfigureKestrel(options =>
 
 // Add services to the container.
 builder.Services.AddApplication();
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddGrpc();

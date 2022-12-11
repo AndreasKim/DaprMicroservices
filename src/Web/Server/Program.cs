@@ -1,6 +1,10 @@
+using AutoMapper;
 using Core.Application;
+using Core.Application.Common.Mappings;
 using Core.Infrastructure;
+using Google.Api;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Reflection;
 
@@ -8,9 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
 // Add services to the container.
-
-builder.Services.AddControllersWithViews();
 builder.Services.AddApplication();
+
+builder.Services.AddControllersWithViews(); 
+builder.Services.AddMediatR(typeof(Services.ProductsService.ProductsService));
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddRazorPages();

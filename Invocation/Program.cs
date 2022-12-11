@@ -25,8 +25,8 @@ namespace Samples.Client
         static async Task<int> Main(string[] args)
         {
             using var client = new DaprClientBuilder().Build();
-            var deposit = new GrpcServiceSample.Generated.GetAccountRequest() { Id = "17" };
-            var account = client.InvokeMethodGrpcAsync<GrpcServiceSample.Generated.GetAccountRequest, Account>("grpcsample", "getaccount", deposit, new CancellationToken()).Result;
+            var deposit = new GrpcServiceSample.Generated.ProductDto() { Description = "17" };
+            var account = client.InvokeMethodGrpcAsync<GrpcServiceSample.Generated.ProductDto, ProductDto>("grpcsample", "createproduct", deposit, new CancellationToken()).Result;
 
             return 1;
         }

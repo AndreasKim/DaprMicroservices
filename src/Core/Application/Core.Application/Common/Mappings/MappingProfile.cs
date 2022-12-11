@@ -1,5 +1,9 @@
 using System.Reflection;
+using System.Windows.Input;
 using AutoMapper;
+using Core.Application.Common.Interfaces;
+using Google.Api;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace Core.Application.Common.Mappings;
 
@@ -7,19 +11,21 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            ApplyMappingsFromAssembly(assembly);
+        }
+
     }
 
     private void ApplyMappingsFromAssembly(Assembly assembly)
     {
-        ApplyMappingForType(assembly, typeof(IMapFrom<>));
-        ApplyMappingForType(assembly, typeof(IMapTo<>));
+        ApplyMappingForType(assembly, typeof(IMapFrom<>), nameof(IMapFrom<object>.Mapping));
+        ApplyMappingForType(assembly, typeof(IMapTo<>), nameof(IMapTo<object>.Mapping));
     }
 
-    private void ApplyMappingForType(Assembly assembly, Type mapFromType)
+    private void ApplyMappingForType(Assembly assembly, Type mapFromType, string mappingMethodName)
     {
-        var mappingMethodName = nameof(IMapFrom<object>.Mapping);
-
         bool HasInterface(Type t) => t.IsGenericType && t.GetGenericTypeDefinition() == mapFromType;
 
         var types = assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(HasInterface)).ToList();

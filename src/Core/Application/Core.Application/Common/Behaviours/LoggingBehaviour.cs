@@ -1,5 +1,5 @@
 ﻿using MediatR.Pipeline;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Common.Behaviours;
 
@@ -10,7 +10,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
     ////private readonly IIdentityService _identityService;
 
     //public LoggingBehaviour(ILogger logger, ICurrentUserService currentUserService, IIdentityService identityService)
-    public LoggingBehaviour(ILogger logger)
+    public LoggingBehaviour(ILogger<TRequest> logger)
     {
         _logger = logger;
         //_currentUserService = currentUserService;
@@ -30,7 +30,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
 
         //_logger.Information("Core Request: {Name} {@UserId} {@UserName} {@Request}",
         //    requestName, userId, userName, request);      
-        _logger.Information("Core Request: {Name} {@UserId} {@UserName} {@Request}",
+        _logger.LogInformation("Core Request: {Name} {@UserId} {@UserName} {@Request}",
             requestName, "UserId", "UserName", request);
     }
 }

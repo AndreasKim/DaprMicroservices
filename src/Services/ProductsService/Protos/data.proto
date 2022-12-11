@@ -15,10 +15,16 @@ syntax = "proto3";
 
 option csharp_namespace = "GrpcServiceSample.Generated";
 
-message Account {
-    string Id = 1;
-    // Ideally we'd use the Money data type here, but to keep the sample simple we're using an int.
-    int32 Balance = 2; 
+message ProductDto{
+    int32 VendorId = 1;
+    string VendorName = 2;
+    string MainCategory = 3;
+    string SubCategory = 4;
+    bool Individualized = 5;
+    string Name = 6;
+    string Description = 7;
+    double Price = 10;
+    int32 SalesInfoId = 11;
 }
 
 message GetAccountRequest {
