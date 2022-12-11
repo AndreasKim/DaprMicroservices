@@ -1,10 +1,12 @@
-﻿using Dapr.AppCallback.Autogen.Grpc.v1;
-using Dapr.Client;
+﻿using AutoMapper.Internal;
+using Core.Application.Common.Attributes;
+using Dapr.AppCallback.Autogen.Grpc.v1;
 using Dapr.Client.Autogen.Grpc.v1;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Core.Application.Common.Models
@@ -27,6 +29,41 @@ namespace Core.Application.Common.Models
         public DaprBaseService(ILogger<DaprBaseService> logger)
         {
             _logger = logger;
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            var endpoints = this.GetType().GetMethods().Where(p => p.Has<GrpcEndpoint>());
+            foreach (var endpoint in endpoints)
+            {
+                var endpointInfo = endpoint.GetCustomAttribute<GrpcEndpoint>();
+                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddInvokeHandler), endpointInfo.Name);
+            }
+
+            var pubSubEndpoints = this.GetType().GetMethods().Where(p => p.Has<PubSubEndpoint>());
+            foreach (var endpoint in pubSubEndpoints)
+            {
+                var endpointInfo = endpoint.GetCustomAttribute<PubSubEndpoint>();
+                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddTopicEvent), endpointInfo.Name);
+            }
+            Console.WriteLine();
+        }
+
+        private void CreateHandlerMapping<T>(MethodInfo endpoint, string eventType, string handlerName) where T : Attribute 
+        {
+            var returntype = endpoint.ReturnParameter.ParameterType;
+            var arguments = endpoint.GetParameters()
+                .Select(p => p.ParameterType)
+                .Append(returntype)
+                .ToArray(); // Todo: Check arguments for request, context form
+
+            var funcType = typeof(Func<,,>).MakeGenericType(arguments);
+            var funcDelegate = endpoint.CreateDelegate(funcType, this);
+
+            var method = typeof(DaprBaseService).GetMethod(eventType, BindingFlags.Instance | BindingFlags.NonPublic);
+            var genericMethod = method.MakeGenericMethod(arguments[0], returntype.GetGenericArguments()[0]);
+            genericMethod.Invoke(this, new object[] { handlerName, funcDelegate });
         }
 
         protected static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

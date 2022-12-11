@@ -1,13 +1,26 @@
+using Core.Application;
+using Core.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Setup a HTTP/2 endpoint without TLS.
+    options.ListenLocalhost(5050, o => o.Protocols =
+        HttpProtocols.Http2);
+});
+
 // Add services to the container.
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddGrpc();
 builder.Services.AddDaprClient();
 builder.Services.AddControllers();
+//builder.Services.AddHostedService<ProductsService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

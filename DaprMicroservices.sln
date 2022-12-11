@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD8EF746-D
 		pubsub.yaml = pubsub.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invocation", "Invocation\Invocation.csproj", "{CF945143-EFF6-4D4E-9521-2D2B1F302E44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF945143-EFF6-4D4E-9521-2D2B1F302E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF945143-EFF6-4D4E-9521-2D2B1F302E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF945143-EFF6-4D4E-9521-2D2B1F302E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF945143-EFF6-4D4E-9521-2D2B1F302E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{52BEE1EA-05B5-42FC-AC16-110889009405} = {C7E86839-FEB5-4A2D-AC31-84EEB3DDC86A}
 		{6593F106-1C1E-4748-AC74-2B03E5C35600} = {230CBD79-284C-4E47-BF36-CCEC2E317EB2}
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D} = {230CBD79-284C-4E47-BF36-CCEC2E317EB2}
+		{CF945143-EFF6-4D4E-9521-2D2B1F302E44} = {C7E86839-FEB5-4A2D-AC31-84EEB3DDC86A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF843B68-B0DF-4AD7-B80F-B1F7A2C49E4D}

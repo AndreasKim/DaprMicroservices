@@ -7,6 +7,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using GrpcServiceSample.Generated;
 using System.Text.Json;
+using Core.Application.Common.Attributes;
 
 namespace Services.ProductsService
 {
@@ -26,72 +27,35 @@ namespace Services.ProductsService
         /// </summary>
         /// <param name="daprClient"></param>
         /// <param name="logger"></param>
-        public ProductsService(DaprClient daprClient, ILogger<ProductsService> logger) : base(daprClient, logger)
+        public ProductsService(DaprClient daprClient, ILogger<ProductsService> logger) : base(logger)
         {
             _daprClient = daprClient;
             _logger = logger;
-            AddInvokeHandlers();
-            AddTopicSubscriptions();
-            AddTopicEvents();
         }
 
-        private void AddInvokeHandlers()
-        {
-            AddInvokeHandler<GetAccountRequest, Account>("getaccount", GetAccount);
-            AddInvokeHandler<Transaction, Account>("deposit", Deposit);
-        }
-
-        private void AddTopicSubscriptions()
-        {
-            AddSubscription("deposit");
-            AddSubscription("withdraw");
-        }
-
-        private void AddTopicEvents()
-        {
-            AddTopicEvent<GetAccountRequest, Account>("getaccount", GetAccount);
-            AddTopicEvent<Transaction, Account>("deposit", Deposit);
-            AddTopicEvent<Transaction, Account>("withdram", Withdraw);
-        }
-
-        /// <summary>
-        /// GetAccount
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        [GrpcEndpoint("getaccount")]
         public async Task<GrpcServiceSample.Generated.Account> GetAccount(GetAccountRequest input, ServerCallContext context)
         {
-            var state = await _daprClient.GetStateEntryAsync<Models.Account>(StoreName, input.Id);
+            var state = await _daprClient.GetStateEntryAsync<GrpcServiceSample.Generated.Account>(StoreName, input.Id);
             return new GrpcServiceSample.Generated.Account() { Id = state.Value.Id, Balance = (int)state.Value.Balance, };
         }
 
-        /// <summary>
-        /// Deposit
-        /// </summary>
-        /// <param name="transaction"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        [PubSubEndpoint("deposit")]
         public async Task<GrpcServiceSample.Generated.Account> Deposit(GrpcServiceSample.Generated.Transaction transaction, ServerCallContext context)
         {
             _logger.LogDebug("Enter deposit");
-            var state = await _daprClient.GetStateEntryAsync<Models.Account>(StoreName, transaction.Id);
-            state.Value ??= new Models.Account() { Id = transaction.Id, };
+            var state = await _daprClient.GetStateEntryAsync<GrpcServiceSample.Generated.Account>(StoreName, transaction.Id);
+            state.Value ??= new Account() { Id = transaction.Id, };
             state.Value.Balance += transaction.Amount;
             await state.SaveAsync();
             return new GrpcServiceSample.Generated.Account() { Id = state.Value.Id, Balance = (int)state.Value.Balance, };
         }
 
-        /// <summary>
-        /// Withdraw
-        /// </summary>
-        /// <param name="transaction"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        [PubSubEndpoint("withdraw")]
         public async Task<GrpcServiceSample.Generated.Account> Withdraw(GrpcServiceSample.Generated.Transaction transaction, ServerCallContext context)
         {
             _logger.LogDebug("Enter withdraw");
-            var state = await _daprClient.GetStateEntryAsync<Models.Account>(StoreName, transaction.Id);
+            var state = await _daprClient.GetStateEntryAsync<Account>(StoreName, transaction.Id);
 
             if (state.Value == null)
             {
@@ -102,6 +66,5 @@ namespace Services.ProductsService
             await state.SaveAsync();
             return new GrpcServiceSample.Generated.Account() { Id = state.Value.Id, Balance = (int)state.Value.Balance, };
         }
-
     }
 }
