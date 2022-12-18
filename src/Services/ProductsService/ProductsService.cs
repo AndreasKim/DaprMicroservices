@@ -5,7 +5,6 @@ using Dapr.Client.Autogen.Grpc.v1;
 using Google.Protobuf.WellKnownTypes;
 using Google.Protobuf;
 using Grpc.Core;
-using GrpcServiceSample.Generated;
 using System.Text.Json;
 using Core.Application.Common.Attributes;
 using Core.Domain.Entities;
@@ -39,10 +38,10 @@ namespace Services.ProductsService
         }
 
         [GrpcEndpoint("createproduct")]
-        public async Task<ProductDto> CreateProduct(ProductDto input, ServerCallContext context)
+        public async Task<CreateProductCommandDto> CreateProduct(CreateProductCommandDto input, ServerCallContext context)
         {
-            var prod = await _sender.Send(new CreateProductCommand() {  Description = input.Description });
-            return new ProductDto();
+            var prod = await _sender.Send(new CreateProductCommand() { Description = input.Description });
+            return new CreateProductCommandDto();
         }
 
         //[PubSubEndpoint("deposit")]

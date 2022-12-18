@@ -4,28 +4,31 @@ using Core.Application.Common.Interfaces;
 using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
+using ProtoBuf;
 
 namespace Services.ProductsService.Application.Commands;
 
-public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
+[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+public record DeleteProductCommand
+(
+    long Id,
+    int VendorId,
+    string VendorName,
+    string MainCategory,
+    string SubCategory,
+    bool Individualized,
+    string Name,
+    string Description,
+    string Thumbnail,
+    double Price,
+    int SalesInfoId
+) : IRequest<Product>, IMapTo<Product>
 {
-    public long Id { get; set; }
-    public int VendorId { get; set; }
-    public string VendorName { get; set; }
-    public string MainCategory { get; set; }
-    public string SubCategory { get; set; }
-    public bool Individualized { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public DateTime CreationDate { get; set; }
-    public Uri Thumbnail { get; set; }
-    public double Price { get; set; }
-    public int SalesInfoId { get; set; }
-
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateProductCommand, Product>()
-            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now));
+        profile.CreateMap<DeleteProductCommand, Product>()
+            .ForMember(src => src.CreationDate, opt => opt.MapFrom(dest => DateTime.Now))
+            .ForMember(src => src.Thumbnail, opt => opt.MapFrom(dest => new Uri(dest.Thumbnail)));
     }
 }
 

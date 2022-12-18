@@ -3,20 +3,21 @@ using Core.Application.Common.Interfaces;
 using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
+using ProtoBuf;
 using Services.ProductsService.Application.Specifications;
 
 namespace Services.ProductsService.Application.Queries;
 
-public record GetProductsQuery : IRequest<List<Product>>, IMapTo<ProductsFilter>
-{
-    public int Amount { get; set; }
-    public bool IsTrending { get; set; }
-    public string City { get; set; }
-    public string SubCategory { get; set; }
-    public long VendorId { get; set; }
-    public int ActivePage { get; set; }
-    public int ProductsPerPage { get; set; }
-}
+[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+public record GetProductsQuery(
+    int Amount,
+    bool IsTrending,
+    string City,
+    string SubCategory,
+    long VendorId,
+    int ActivePage,
+    int ProductsPerPage
+) : IRequest<List<Product>>, IMapTo<ProductsFilter>;
 
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Product>>
 {

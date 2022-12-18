@@ -8,6 +8,7 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Core.Application.Common.Models
 {
@@ -29,10 +30,10 @@ namespace Core.Application.Common.Models
         public DaprBaseService(ILogger<DaprBaseService> logger)
         {
             _logger = logger;
-            Initialize();
+            InitializeEndpoints();
         }
 
-        private void Initialize()
+        private void InitializeEndpoints()
         {
             var endpoints = this.GetType().GetMethods().Where(p => p.Has<GrpcEndpoint>());
             foreach (var endpoint in endpoints)
@@ -47,7 +48,6 @@ namespace Core.Application.Common.Models
                 var endpointInfo = endpoint.GetCustomAttribute<PubSubEndpoint>();
                 CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddTopicEvent), endpointInfo.Name);
             }
-            Console.WriteLine();
         }
 
         private void CreateHandlerMapping<T>(MethodInfo endpoint, string eventType, string handlerName) where T : Attribute 

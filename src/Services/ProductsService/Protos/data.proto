@@ -1,38 +1,54 @@
-﻿// ------------------------------------------------------------------------
-// Copyright 2021 The Dapr Authors
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//     http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// ------------------------------------------------------------------------
-
 syntax = "proto3";
-
-option csharp_namespace = "GrpcServiceSample.Generated";
-
-message ProductDto{
-    int32 VendorId = 1;
-    string VendorName = 2;
-    string MainCategory = 3;
-    string SubCategory = 4;
-    bool Individualized = 5;
-    string Name = 6;
-    string Description = 7;
-    double Price = 10;
-    int32 SalesInfoId = 11;
+option csharp_namespace = "Services.ProductsService";
+message GetProductByIdQueryDto {
+   int64 Id = 1;
+   bool IncludeRatings = 2;
+   bool IncludeSalesInfo = 3;
 }
-
-message GetAccountRequest {
-    string Id = 1;
+message GetProductsQueryDto {
+   int32 ActivePage = 1;
+   int32 Amount = 2;
+   string City = 3;
+   bool IsTrending = 4;
+   int32 ProductsPerPage = 5;
+   string SubCategory = 6;
+   int64 VendorId = 7;
 }
-
-message Transaction {
-    string Id = 1;
-    // Ideally we'd use the Money data type here, but to keep the sample simple we're using an int.
-    int32 Amount = 2;
+message CreateProductCommandDto {
+   string Description = 1;
+   bool Individualized = 2;
+   string MainCategory = 3;
+   string Name = 4;
+   double Price = 5;
+   int32 SalesInfoId = 6;
+   string SubCategory = 7;
+   string Thumbnail = 8;
+   int32 VendorId = 9;
+   string VendorName = 10;
+}
+message DeleteProductCommandDto {
+   string Description = 1;
+   int64 Id = 2;
+   bool Individualized = 3;
+   string MainCategory = 4;
+   string Name = 5;
+   double Price = 6;
+   int32 SalesInfoId = 7;
+   string SubCategory = 8;
+   string Thumbnail = 9;
+   int32 VendorId = 10;
+   string VendorName = 11;
+}
+message UpdateProductCommandDto {
+   string Description = 1;
+   int64 Id = 2;
+   bool Individualized = 3;
+   string MainCategory = 4;
+   string Name = 5;
+   double Price = 6;
+   int32 SalesInfoId = 7;
+   string SubCategory = 8;
+   string Thumbnail = 9;
+   int32 VendorId = 10;
+   string VendorName = 11;
 }

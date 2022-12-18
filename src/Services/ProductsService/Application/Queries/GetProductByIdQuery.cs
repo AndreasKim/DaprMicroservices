@@ -3,17 +3,17 @@ using Core.Application.Common.Interfaces;
 using Core.Application.Common.Mappings;
 using Core.Domain.Entities;
 using MediatR;
-using Services.ProductsService.Application.Commands;
+using ProtoBuf;
 using Services.ProductsService.Application.Specifications;
 
 namespace Services.ProductsService.Application.Queries;
 
-public record GetProductByIdQuery : IRequest<Product>, IMapTo<ProductFilter>
-{
-    public long Id { get; set; }
-    public bool IncludeSalesInfo { get; set; }
-    public bool IncludeRatings { get; set; }
-}
+[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+public record GetProductByIdQuery(
+    long Id,
+    bool IncludeSalesInfo,
+    bool IncludeRatings
+) : IRequest<Product>, IMapTo<ProductFilter>;
 
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Product>
 {

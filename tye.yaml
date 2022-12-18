@@ -1,0 +1,21 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: daprmicroservices
+extensions:
+  # Configuration for dapr goes here.
+- name: dapr
+  components-path: dapr/
+
+services:
+- name: daprmicroservices-server
+  project: src/Web/Server/DaprMicroservices.Server.csproj
+- name: daprmicroservices-client
+  project: src/Web/Client/DaprMicroservices.Client.csproj
+- name: services-productsservice
+  project: src/Services/ProductsService/Services.ProductsService.csproj
+- name: invocation
+  project: Invocation/Invocation.csproj

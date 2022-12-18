@@ -1,10 +1,9 @@
 using Core.Application;
 using Core.Infrastructure;
-using Google.Api;
 using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
-using System.Reflection;
+using Services.ProductsService.Protos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +13,8 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenLocalhost(5050, o => o.Protocols =
         HttpProtocols.Http2);
 });
+
+Protogen.Generate();
 
 // Add services to the container.
 builder.Services.AddApplication();
