@@ -26,10 +26,12 @@ namespace Samples.Client
             {
                 await Task.Delay(10000);
                 using var client = new DaprClientBuilder().Build();
+
                 var deposit = new CreateProductRequest() { Name = "TestName", Description = "TestDescription" };
                 var productId = await client.InvokeMethodGrpcAsync<CreateProductRequest, Int32Value>("productsservice", "createproduct", deposit, new CancellationToken());
                 Console.WriteLine("Created Product:");
                 Console.WriteLine(productId.Value);
+
                 var product = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
                     ("productsservice", "getproduct", new GetProductByIdRequest() { Id = productId.Value, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
                 Console.WriteLine("Read Product:");

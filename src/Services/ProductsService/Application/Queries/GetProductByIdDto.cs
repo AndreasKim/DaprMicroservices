@@ -21,6 +21,6 @@ public class GetProductByIdDto : IResponse, IMapFrom<Product>
     {
         profile
             .CreateMap<Product, GetProductByIdDto>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); 
     }
 }   
