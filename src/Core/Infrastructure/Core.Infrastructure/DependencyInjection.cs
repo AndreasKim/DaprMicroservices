@@ -1,4 +1,4 @@
-﻿using Core.Application.Common.Interfaces;
+﻿using Core.Application.Interfaces;
 using Core.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,17 +8,15 @@ namespace Core.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure<T>(this IServiceCollection services, IConfiguration configuration) where T : DbContext
         {
-            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<T>(options =>
                 options.UseLazyLoadingProxies().UseSqlServer(connectionString, 
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                builder => builder.MigrationsAssembly(typeof(T).Assembly.FullName)));
 
-            services.AddScoped<ApplicationDbContextInitialiser>();
+            //services.AddScoped<ApplicationDbContextInitialiser>();
 
 
             return services;

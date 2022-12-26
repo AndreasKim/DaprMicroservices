@@ -5,7 +5,7 @@ namespace Services.ProductsService.Application.Specifications;
 
 public class ProductFilter
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
     public bool IncludeSalesInfo { get; set; }
     public bool IncludeRatings { get; set; }
 }

@@ -1,0 +1,54 @@
+syntax = "proto3";
+option csharp_namespace = "Services.ProductsService";
+message GetProductByIdQueryDto {
+   int32 Id = 1;
+   bool IncludeRatings = 2;
+   bool IncludeSalesInfo = 3;
+}
+message GetProductsQueryDto {
+   int32 ActivePage = 1;
+   int32 Amount = 2;
+   string City = 3;
+   bool IsTrending = 4;
+   int32 ProductsPerPage = 5;
+   string SubCategory = 6;
+   int64 VendorId = 7;
+}
+message CreateProductCommandDto {
+   string Description = 1;
+   bool Individualized = 2;
+   string MainCategory = 3;
+   string Name = 4;
+   double Price = 5;
+   int32 SalesInfoId = 6;
+   string SubCategory = 7;
+   string Thumbnail = 8;
+   int32 VendorId = 9;
+   string VendorName = 10;
+}
+message DeleteProductCommandDto {
+   string Description = 1;
+   int32 Id = 2;
+   bool Individualized = 3;
+   string MainCategory = 4;
+   string Name = 5;
+   double Price = 6;
+   int32 SalesInfoId = 7;
+   string SubCategory = 8;
+   string Thumbnail = 9;
+   int32 VendorId = 10;
+   string VendorName = 11;
+}
+message UpdateProductCommandDto {
+   string Description = 1;
+   int32 Id = 2;
+   bool Individualized = 3;
+   string MainCategory = 4;
+   string Name = 5;
+   double Price = 6;
+   int32 SalesInfoId = 7;
+   string SubCategory = 8;
+   string Thumbnail = 9;
+   int32 VendorId = 10;
+   string VendorName = 11;
+}

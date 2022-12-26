@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Application.Common.Interfaces;
-using Core.Application.Common.Mappings;
+using Core.Application.Interfaces;
+using Core.Application.Mappings;
 using Core.Domain.Entities;
 using MediatR;
 using ProtoBuf;
@@ -9,15 +9,15 @@ using Services.ProductsService.Application.Specifications;
 namespace Services.ProductsService.Application.Queries;
 
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-public record GetProductsQuery(
-    int Amount,
-    bool IsTrending,
-    string City,
-    string SubCategory,
-    long VendorId,
-    int ActivePage,
-    int ProductsPerPage
-) : IRequest<List<Product>>, IMapTo<ProductsFilter>;
+public record GetProductsQuery : IRequest<List<Product>>, IMapTo<ProductsFilter>
+{
+    public int Amount { get; set; }
+    public bool IsTrending { get; set; }
+    public string? City { get; set; }
+    public string? SubCategory { get; set; }
+    public int ActivePage { get; set; }
+    public int ProductsPerPage { get; set; }
+}
 
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Product>>
 {

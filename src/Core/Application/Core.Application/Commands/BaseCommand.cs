@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Application.Common.Interfaces;
+using Core.Application.Interfaces;
 using Core.Domain.Entities;
 using MediatR;
 

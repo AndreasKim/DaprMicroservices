@@ -1,5 +1,7 @@
-﻿using Core.Application.Common.Mappings;
-using Core.Application.Common.Models;
+﻿using Core.Application.Mappings;
+using Core.Application.Models;
+using Core.Application.Interfaces;
+using MediatR;
 using MediatR.Wrappers;
 using ProtoBuf;
 using ProtoBuf.Meta;
@@ -12,13 +14,13 @@ namespace Services.ProductsService.Protos
     {
         public static void Generate() 
         {
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetAssembly(typeof(Program));
             var types = assembly.GetTypes().Where(p => p.GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapTo<>)));         
+                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequest<>)));         
             var method = typeof(Serializer).GetMethods().FirstOrDefault(p => p.IsGenericMethod && p.IsPublic && p.IsStatic && p.Name == "GetProto")
                 ?? throw new ArgumentNullException("GetProto");
 
-            var service = assembly.GetTypes().First(p => p.IsSubclassOf(typeof(DaprBaseService)));
+            var service = assembly.GetTypes().Single(p => p.IsSubclassOf(typeof(DaprBaseService)));
 
             var builder = new StringBuilder();
             builder.AppendLine("syntax = \"proto3\";");

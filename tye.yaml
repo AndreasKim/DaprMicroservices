@@ -8,14 +8,17 @@ name: daprmicroservices
 extensions:
   # Configuration for dapr goes here.
 - name: dapr
-  components-path: dapr/
+  components-path: ./
+  log-level: debug
+  
 
 services:
-- name: daprmicroservices-server
-  project: src/Web/Server/DaprMicroservices.Server.csproj
-- name: daprmicroservices-client
-  project: src/Web/Client/DaprMicroservices.Client.csproj
-- name: services-productsservice
-  project: src/Services/ProductsService/Services.ProductsService.csproj
+- name: server
+  executable: dapr
+  args: run --app-id server -- dotnet run --project  ../src/Web/Server/DaprMicroservices.Server.csproj
+- name: productsservice
+  executable: dapr
+  args: run --app-id productsservice -p 5050 --app-protocol grpc -- dotnet run --project ../src/Services/ProductsService/Services.ProductsService.csproj --urls "http://localhost:5050"
 - name: invocation
-  project: Invocation/Invocation.csproj
+  executable: dapr
+  args: run --app-id daprclient -- dotnet run --project ../src/Services/Invocation/Invocation.csproj

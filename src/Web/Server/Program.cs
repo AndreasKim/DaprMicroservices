@@ -1,6 +1,6 @@
 using AutoMapper;
 using Core.Application;
-using Core.Application.Common.Mappings;
+using Core.Application.Mappings;
 using Core.Infrastructure;
 using Google.Api;
 using MediatR;
@@ -15,8 +15,8 @@ builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Con
 builder.Services.AddApplication();
 
 builder.Services.AddControllersWithViews(); 
-builder.Services.AddMediatR(typeof(Services.ProductsService.ProductsService));
-builder.Services.AddInfrastructure(builder.Configuration);
+//builder.Services.AddMediatR(typeof(Services.ProductsService.ProductsService));
+//builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddRazorPages();
 
@@ -34,7 +34,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

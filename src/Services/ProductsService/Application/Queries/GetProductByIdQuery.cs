@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core.Application.Common.Interfaces;
-using Core.Application.Common.Mappings;
+using Core.Application.Interfaces;
+using Core.Application.Mappings;
 using Core.Domain.Entities;
 using MediatR;
 using ProtoBuf;
@@ -9,11 +9,13 @@ using Services.ProductsService.Application.Specifications;
 namespace Services.ProductsService.Application.Queries;
 
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-public record GetProductByIdQuery(
-    long Id,
-    bool IncludeSalesInfo,
-    bool IncludeRatings
-) : IRequest<Product>, IMapTo<ProductFilter>;
+public record GetProductByIdQuery : IRequest<Product>, IMapTo<ProductFilter>
+{
+    public int Id { get; set; }
+    public bool IncludeSalesInfo { get; set; }
+    public bool IncludeRatings { get; set; }
+}
+
 
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Product>
 {

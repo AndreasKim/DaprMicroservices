@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Application.Commands;
-using Core.Application.Common.Interfaces;
-using Core.Application.Common.Mappings;
+using Core.Application.Interfaces;
+using Core.Application.Mappings;
 using Core.Domain.Entities;
 using MediatR;
 using ProtoBuf;
@@ -9,25 +9,21 @@ using ProtoBuf;
 namespace Services.ProductsService.Application.Commands;
 
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-public record DeleteProductCommand
-(
-    long Id,
-    int VendorId,
-    string VendorName,
-    string MainCategory,
-    string SubCategory,
-    bool Individualized,
-    string Name,
-    string Description,
-    string Thumbnail,
-    double Price,
-    int SalesInfoId
-) : IRequest<Product>, IMapTo<Product>
-{
+public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
+{   
+    public int Id { get; set; }
+    public string? MainCategory { get; set; }
+    public string? SubCategory { get; set; }
+    public bool Individualized { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public string? Thumbnail { get; set; }
+    public double Price{ get; set; }
+    public int SalesInfoId { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<DeleteProductCommand, Product>()
-            .ForMember(src => src.CreationDate, opt => opt.MapFrom(dest => DateTime.Now))
             .ForMember(src => src.Thumbnail, opt => opt.MapFrom(dest => new Uri(dest.Thumbnail)));
     }
 }

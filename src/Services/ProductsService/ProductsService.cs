@@ -1,19 +1,14 @@
-﻿using Core.Application.Common.Models;
-using Dapr.AppCallback.Autogen.Grpc.v1;
+﻿using Core.Application.Attributes;
+using Core.Application.Models;
 using Dapr.Client;
-using Dapr.Client.Autogen.Grpc.v1;
 using Google.Protobuf.WellKnownTypes;
-using Google.Protobuf;
 using Grpc.Core;
-using System.Text.Json;
-using Core.Application.Common.Attributes;
-using Core.Domain.Entities;
 using MediatR;
 using Services.ProductsService.Application.Commands;
 
 namespace Services.ProductsService
 {
-    public class ProductsService : DaprBaseService
+    public class ProductsService : DaprBaseService, IHostedService
     {
         private const string PUBSUBNAME = "pubsub";
         /// <summary>
@@ -38,10 +33,20 @@ namespace Services.ProductsService
         }
 
         [GrpcEndpoint("createproduct")]
-        public async Task<CreateProductCommandDto> CreateProduct(CreateProductCommandDto input, ServerCallContext context)
+        public async Task<Int32Value> CreateProduct(CreateProductCommandDto input, ServerCallContext context)
+        {         
+            var prod = await _sender.Send(new CreateProductCommand() { Description = input.Description }); 
+            return new Int32Value() { Value = prod.Id };
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            var prod = await _sender.Send(new CreateProductCommand() { Description = input.Description });
-            return new CreateProductCommandDto();
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         //[PubSubEndpoint("deposit")]

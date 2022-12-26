@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Application.Commands;
-using Core.Application.Common.Mappings;
+using Core.Application.Mappings;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

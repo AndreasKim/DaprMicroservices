@@ -9,7 +9,7 @@
         {
             BuyerId = userId;
             Product = product;
-            SellerId = product.Vendor.ShopOwnerId;
+            //SellerId = product.Vendor.ShopOwnerId;
         }
 
         public int Id { get; set; } 
