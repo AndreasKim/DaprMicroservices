@@ -13,7 +13,7 @@
 
 using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
-using Services.ProductsService;
+using Services.ProductsService.Generated;
 
 namespace Samples.Client
 {
@@ -26,14 +26,17 @@ namespace Samples.Client
             {
                 await Task.Delay(10000);
                 using var client = new DaprClientBuilder().Build();
-                var deposit = new CreateProductCommandDto() { Name = "Test" };
-                var account = await client.InvokeMethodGrpcAsync<CreateProductCommandDto, Int32Value>("productsservice", "createproduct", deposit, new CancellationToken());
-                Console.WriteLine(account.Value);
-                Console.WriteLine("!!!!!");
+                var deposit = new CreateProductRequest() { Name = "TestName", Description = "TestDescription" };
+                var productId = await client.InvokeMethodGrpcAsync<CreateProductRequest, Int32Value>("productsservice", "createproduct", deposit, new CancellationToken());
+                Console.WriteLine("Created Product:");
+                Console.WriteLine(productId.Value);
+                var product = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
+                    ("productsservice", "getproduct", new GetProductByIdRequest() { Id = productId.Value, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
+                Console.WriteLine("Read Product:");
+                Console.WriteLine(product.Id);
+                Console.WriteLine(product.Name);
+                Console.WriteLine(product.Description);
             }
-
-
-            return 1;
         }
     }
 }

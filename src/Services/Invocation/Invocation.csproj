@@ -12,7 +12,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <None Remove="Protos\data.proto" />
+	  <None Remove="Protos\ProductsService.proto" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -24,8 +24,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Protobuf Include="Protos\data.proto" GrpcServices="None">
+	  <Protobuf Update="Protos\ProductsService.proto">
 	    <ProtoRoot>Protos</ProtoRoot>
+	    <GrpcServices>None</GrpcServices>
 	  </Protobuf>
 	</ItemGroup>
 </Project>

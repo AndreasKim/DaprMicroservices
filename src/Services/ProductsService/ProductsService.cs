@@ -5,12 +5,13 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
 using Services.ProductsService.Application.Commands;
+using Services.ProductsService.Application.Queries;
+using Services.ProductsService.Generated;
 
 namespace Services.ProductsService
 {
-    public class ProductsService : DaprBaseService, IHostedService
+    public class ProductsService : DaprBaseService
     {
-        private const string PUBSUBNAME = "pubsub";
         /// <summary>
         /// State store name.
         /// </summary>
@@ -33,32 +34,20 @@ namespace Services.ProductsService
         }
 
         [GrpcEndpoint("createproduct")]
-        public async Task<Int32Value> CreateProduct(CreateProductCommandDto input, ServerCallContext context)
+        public async Task<Int32Value> CreateProduct(CreateProductRequest request, ServerCallContext context)
         {         
-            var prod = await _sender.Send(new CreateProductCommand() { Description = input.Description }); 
-            return new Int32Value() { Value = prod.Id };
+            var prod = await _sender.Send(new CreateProductCommand() { Name = request.Name, Description = request.Description }); 
+            return new Int32Value() { Value = prod.Id }; 
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        [GrpcEndpoint("getproduct")]
+        public async Task<GetProductByIdResponse> GetProduct(GetProductByIdRequest request, ServerCallContext context)
         {
-            return Task.CompletedTask;
-        }
+            if(request.Id == null) throw new ArgumentNullException(nameof(request.Id));
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
+            var prod = await _sender.Send(new GetProductByIdQuery() {  Id = (int)request.Id });
+            return new GetProductByIdResponse() { Id = prod.Id, Description = prod.Description, Name = prod.Name };
         }
-
-        //[PubSubEndpoint("deposit")]
-        //public async Task<GrpcServiceSample.Generated.Account> Deposit(GrpcServiceSample.Generated.Transaction transaction, ServerCallContext context)
-        //{
-        //    _logger.LogDebug("Enter deposit");
-        //    var state = await _daprClient.GetStateEntryAsync<GrpcServiceSample.Generated.Account>(StoreName, transaction.Id);
-        //    state.Value ??= new Account() { Id = transaction.Id, };
-        //    state.Value.Balance += transaction.Amount;
-        //    await state.SaveAsync();
-        //    return new GrpcServiceSample.Generated.Account() { Id = state.Value.Id, Balance = (int)state.Value.Balance, };
-        //}
 
         //[PubSubEndpoint("withdraw")]
         //public async Task<GrpcServiceSample.Generated.Account> Withdraw(GrpcServiceSample.Generated.Transaction transaction, ServerCallContext context)

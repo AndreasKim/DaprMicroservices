@@ -1,10 +1,8 @@
 using Core.Application;
-using Core.Application.Interfaces;
 using Core.Infrastructure;
 using Man.Dapr.Sidekick;
 using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using ProtoBuf.Grpc.Configuration;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
 using Services.ProductsService.Protos;
@@ -18,13 +16,10 @@ builder.WebHost.ConfigureKestrel(options =>
         HttpProtocols.Http2);
 });
 
-Protogen.Generate();
-
 // Add services to the container.
 builder.Services
     .AddApplication() 
-    .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
-    .AddInfrastructure<ApplicationDbContext>(builder.Configuration)
+    .AddInfrastructure<ApplicationDbContext>(builder.Configuration, typeof(EfRepository<>))
     .AddMediatR(typeof(Program))
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
@@ -43,6 +38,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    Protogen.Generate();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

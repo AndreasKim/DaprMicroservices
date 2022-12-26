@@ -14,6 +14,10 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <None Remove="Protos\ProductsService.proto" />
+  </ItemGroup>
+	
+  <ItemGroup>
 	<PackageReference Include="Google.Protobuf" Version="3.21.11" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageReference Include="Dapr.Client" Version="1.9.0" />
@@ -39,6 +43,13 @@
     <ProjectReference Include="..\..\Core\Application\Core.Application\Core.Application.csproj" />
     <ProjectReference Include="..\..\Core\Domain\Core.Domain\Core.Domain.csproj" />
     <ProjectReference Include="..\..\Core\Infrastructure\Core.Infrastructure\Core.Infrastructure.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Protobuf Update="Protos\ProductsService.proto">
+      <ProtoRoot>Protos</ProtoRoot>
+      <GrpcServices>None</GrpcServices>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

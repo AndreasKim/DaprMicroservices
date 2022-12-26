@@ -9,7 +9,7 @@ using Services.ProductsService.Application.Specifications;
 namespace Services.ProductsService.Application.Queries;
 
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-public record GetProductByIdQuery : IRequest<Product>, IMapTo<ProductFilter>
+public record GetProductByIdQuery : IRequest<GetProductByIdDto>, IMapTo<ProductFilter>
 {
     public int Id { get; set; }
     public bool IncludeSalesInfo { get; set; }
@@ -17,7 +17,7 @@ public record GetProductByIdQuery : IRequest<Product>, IMapTo<ProductFilter>
 }
 
 
-public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Product>
+public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, GetProductByIdDto>
 {
     private readonly IRepository<Product> _repository;
     private readonly IMapper _mapper;
@@ -28,10 +28,12 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, P
         _mapper = mapper;
     }
 
-    public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetProductByIdDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
         var filter = _mapper.Map<ProductFilter>(request);
 
-        return await _repository.SingleOrDefaultAsync(new ProductSpecification(filter), cancellationToken) ?? new Product();
+        var product = await _repository.SingleOrDefaultAsync(new ProductSpecification(filter), cancellationToken);
+
+        return _mapper.Map<GetProductByIdDto>(product);
     }
 }

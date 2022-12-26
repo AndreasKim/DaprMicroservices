@@ -67,7 +67,7 @@ namespace Core.Application.Models
 
         protected static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-        protected ListTopicSubscriptionsResponse TopicSubscriptions { get; set; }
+        protected ListTopicSubscriptionsResponse TopicSubscriptions { get; set; } = new ListTopicSubscriptionsResponse();
 
         protected Dictionary<string, Func<InvokeRequest, ServerCallContext, InvokeResponse, Task>> InvokeHandlers { get; set; }
             = new Dictionary<string, Func<InvokeRequest, ServerCallContext, InvokeResponse, Task>>();
@@ -87,6 +87,8 @@ namespace Core.Application.Models
         {
             TopicEventHandlers.Add(handlerName,
                 async (request, context) => await HandleTopicEvent<TRequest, TModel>(request, async p => await handler(p, context)));
+
+            AddSubscription(handlerName);
         }
 
         /// <summary>
@@ -130,15 +132,6 @@ namespace Core.Application.Models
             return new TopicEventResponse();
         }
 
-        protected void AddSubscription(string topic)
-        {
-            TopicSubscriptions.Subscriptions.Add(new TopicSubscription
-            {
-                PubsubName = PUBSUBNAME,
-                Topic = topic
-            });
-        }
-
         /// <summary>
         /// implement ListTopicSubscriptions to register deposit and withdraw subscriber
         /// </summary>
@@ -148,6 +141,15 @@ namespace Core.Application.Models
         public override Task<ListTopicSubscriptionsResponse> ListTopicSubscriptions(Empty request, ServerCallContext context)
         {
             return Task.FromResult(TopicSubscriptions);
+        }
+
+        protected void AddSubscription(string topic)
+        {
+            TopicSubscriptions.Subscriptions.Add(new TopicSubscription
+            {
+                PubsubName = PUBSUBNAME,
+                Topic = topic
+            });
         }
 
         private static async Task HandleIOStream<TRequest, TModel>(InvokeRequest request, InvokeResponse response,
@@ -167,7 +169,5 @@ namespace Core.Application.Models
             var input = JsonSerializer.Deserialize<TRequest>(request.Data.ToStringUtf8(), jsonOptions);
             await handler(input);
         }
-
-
     }
 }

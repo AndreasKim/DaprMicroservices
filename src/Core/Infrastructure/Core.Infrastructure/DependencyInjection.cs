@@ -8,7 +8,7 @@ namespace Core.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure<T>(this IServiceCollection services, IConfiguration configuration) where T : DbContext
+        public static IServiceCollection AddInfrastructure<T>(this IServiceCollection services, IConfiguration configuration, Type repository) where T : DbContext
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
@@ -16,6 +16,7 @@ namespace Core.Infrastructure
                 options.UseLazyLoadingProxies().UseSqlServer(connectionString, 
                 builder => builder.MigrationsAssembly(typeof(T).Assembly.FullName)));
 
+            services.AddScoped(typeof(IRepository<>), repository);
             //services.AddScoped<ApplicationDbContextInitialiser>();
 
 
