@@ -1,5 +1,4 @@
 ﻿using Core.Application.Interfaces;
-using Core.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,6 @@ namespace Core.Infrastructure
 
             services.AddScoped(typeof(IRepository<>), repository);
             //services.AddScoped<ApplicationDbContextInitialiser>();
-
 
             return services;
         }

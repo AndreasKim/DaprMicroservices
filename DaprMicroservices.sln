@@ -29,12 +29,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "src\Core\Dom
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD8EF746-D6FE-465E-8275-011E4FFCD53A}"
 	ProjectSection(SolutionItems) = preProject
+		dapr\config.yaml = dapr\config.yaml
 		tye.yaml = tye.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invocation", "src\Services\Invocation\Invocation.csproj", "{8C0FDC49-D723-40C7-895B-99C1DAD7994C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "tests\TestProject1\TestProject1.csproj", "{9DA07B73-BC0D-48C6-94DF-5720D67A3577}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{D9FFDA09-B229-438A-B2F7-18C125AA3E66}"
+	ProjectSection(SolutionItems) = preProject
+		dapr\components\pubsub.yaml = dapr\components\pubsub.yaml
+		dapr\components\statestore.yaml = dapr\components\statestore.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +102,7 @@ Global
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D} = {230CBD79-284C-4E47-BF36-CCEC2E317EB2}
 		{8C0FDC49-D723-40C7-895B-99C1DAD7994C} = {C7E86839-FEB5-4A2D-AC31-84EEB3DDC86A}
 		{9DA07B73-BC0D-48C6-94DF-5720D67A3577} = {AB2FBC37-6C5C-46B6-9465-6A24082866F1}
+		{D9FFDA09-B229-438A-B2F7-18C125AA3E66} = {FD8EF746-D6FE-465E-8275-011E4FFCD53A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF843B68-B0DF-4AD7-B80F-B1F7A2C49E4D}

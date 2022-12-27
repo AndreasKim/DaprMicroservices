@@ -14,6 +14,7 @@
 using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
 using Services.ProductsService.Generated;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Samples.Client
 {
@@ -22,23 +23,54 @@ namespace Samples.Client
 
         static async Task<int> Main(string[] args)
         {
-            while (true)
+            for (int i = 0; i < 10; i++)
             {
-                await Task.Delay(10000);
-                using var client = new DaprClientBuilder().Build();
-
-                var deposit = new CreateProductRequest() { Name = "TestName", Description = "TestDescription" };
-                var productId = await client.InvokeMethodGrpcAsync<CreateProductRequest, Int32Value>("productsservice", "createproduct", deposit, new CancellationToken());
-                Console.WriteLine("Created Product:");
-                Console.WriteLine(productId.Value);
-
-                var product = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
-                    ("productsservice", "getproduct", new GetProductByIdRequest() { Id = productId.Value, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
-                Console.WriteLine("Read Product:");
-                Console.WriteLine(product.Id);
-                Console.WriteLine(product.Name);
-                Console.WriteLine(product.Description);
+                await Task.Delay(1000);
+                await TestCrud();
             }
+
+            return 1;
+        }
+
+        private static async Task TestCrud()
+        {
+            await Task.Delay(10000);
+            var client = new DaprClientBuilder().Build();
+
+            var deposit = new CreateProductRequest() { Name = "TestName", Description = "TestDescription" };
+            var productId = await client.InvokeMethodGrpcAsync<CreateProductRequest, Int32Value>("productsservice", "createproduct", deposit, new CancellationToken());
+            Console.WriteLine("Created Product:");
+            Console.WriteLine(productId.Value);
+            Console.WriteLine();
+
+            var product = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
+                ("productsservice", "getproduct", new GetProductByIdRequest() { Id = productId.Value, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
+            Console.WriteLine("Read Product:");
+            Console.WriteLine(product.Id);
+            Console.WriteLine(product.Name);
+            Console.WriteLine(product.Description);
+            Console.WriteLine();
+
+            await client.PublishEventAsync("pubsub", "updateproduct",
+                new UpdateProductRequest() { Id = product.Id, Description = "NewDescription", Name = "NewName" });
+
+            await Task.Delay(1000);
+
+            var updatedProd = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
+                ("productsservice", "getproduct", new GetProductByIdRequest() { Id = product.Id, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
+
+            Console.WriteLine("Update Product by PubSub:");
+            Console.WriteLine(updatedProd.Id);
+            Console.WriteLine(updatedProd.Name);
+            Console.WriteLine(updatedProd.Description);
+            Console.WriteLine();
+
+            await client.PublishEventAsync("pubsub", "deleteproduct", new DeleteProductRequest() { Id = product.Id });
+            await Task.Delay(1000);
+            Console.WriteLine("Delete Product by PubSub:");
+            var deletedProd = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
+                ("productsservice", "getproduct", new GetProductByIdRequest() { Id = product.Id, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
+            Console.WriteLine(deletedProd.Id);
         }
     }
 }

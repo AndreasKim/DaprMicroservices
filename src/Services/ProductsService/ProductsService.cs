@@ -13,11 +13,6 @@ namespace Services.ProductsService
 {
     public class ProductsService : DaprBaseService
     {
-        /// <summary>
-        /// State store name.
-        /// </summary>
-        public const string StoreName = "statestore";
-
         private readonly ILogger<ProductsService> _logger;
         private readonly ISender _sender;
         private readonly IMapper _mapper;
@@ -56,20 +51,20 @@ namespace Services.ProductsService
             return response;
         }
 
-        //[PubSubEndpoint("withdraw")]
-        //public async Task<GrpcServiceSample.Generated.Account> Withdraw(GrpcServiceSample.Generated.Transaction transaction, ServerCallContext context)
-        //{
-        //    _logger.LogDebug("Enter withdraw");
-        //    var state = await _daprClient.GetStateEntryAsync<Account>(StoreName, transaction.Id);
+        [PubSubEndpoint("updateproduct")]
+        public async Task UpdateProduct(UpdateProductRequest request, ServerCallContext context)
+        {
+            var query = _mapper.Map<UpdateProductCommand>(request);
 
-        //    if (state.Value == null)
-        //    {
-        //        throw new Exception($"NotFound: {transaction.Id}");
-        //    }
+            await _sender.Send(query);
+        }
 
-        //    state.Value.Balance -= transaction.Amount;
-        //    await state.SaveAsync();
-        //    return new GrpcServiceSample.Generated.Account() { Id = state.Value.Id, Balance = (int)state.Value.Balance, };
-        //}
+        [PubSubEndpoint("deleteproduct")]
+        public async Task DeleteProduct(DeleteProductRequest request, ServerCallContext context)
+        {
+            var query = _mapper.Map<DeleteProductCommand>(request);
+
+            await _sender.Send(query);
+        }
     }
 }

@@ -22,8 +22,6 @@ internal class ProductSpecification : Specification<Product>, ISingleResultSpeci
         if (filter.IncludeSalesInfo)
             Query.Include(p => p.SalesInfo);
 
-
     }
-
 }
 

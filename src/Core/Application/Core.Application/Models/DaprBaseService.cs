@@ -51,17 +51,19 @@ namespace Core.Application.Models
 
         private void CreateHandlerMapping<T>(MethodInfo endpoint, string eventType, string handlerName) where T : Attribute
         {
-            var returntype = endpoint.ReturnParameter.ParameterType;
+            var returnType = endpoint.ReturnParameter.ParameterType;
+            var returnTypeArguments = returnType.IsGenericType ? returnType.GetGenericArguments()[0] : returnType;
+
             var arguments = endpoint.GetParameters()
                 .Select(p => p.ParameterType)
-                .Append(returntype)
+                .Append(returnType)
                 .ToArray(); // Todo: Check arguments for request, context form
 
             var funcType = typeof(Func<,,>).MakeGenericType(arguments);
             var funcDelegate = endpoint.CreateDelegate(funcType, this);
 
             var method = typeof(DaprBaseService).GetMethod(eventType, BindingFlags.Instance | BindingFlags.NonPublic);
-            var genericMethod = method.MakeGenericMethod(arguments[0], returntype.GetGenericArguments()[0]);
+            var genericMethod = method.MakeGenericMethod(arguments[0], returnTypeArguments);
             genericMethod.Invoke(this, new object[] { handlerName, funcDelegate });
         }
 
@@ -81,12 +83,11 @@ namespace Core.Application.Models
                 async (request, context, response) => await HandleIOStream<TRequest, TModel>(request, response, async p => await handler(p, context)));
         }
 
-        protected void AddTopicEvent<TRequest, TModel>(string handlerName, Func<TRequest, ServerCallContext, Task<TModel>> handler)
+        protected void AddTopicEvent<TRequest, TModel>(string handlerName, Func<TRequest, ServerCallContext, Task> handler)
             where TRequest : IMessage, new()
-            where TModel : IMessage, new()
         {
             TopicEventHandlers.Add(handlerName,
-                async (request, context) => await HandleTopicEvent<TRequest, TModel>(request, async p => await handler(p, context)));
+                async (request, context) => await HandleTopicEvent<TRequest>(request, async p => await handler(p, context)));
 
             AddSubscription(handlerName);
         }
@@ -159,12 +160,12 @@ namespace Core.Application.Models
         {
             var input = request.Data.Unpack<TRequest>();
             var output = await handler(input);
-            response.Data = Any.Pack(output);
+
+            response.Data = Any.Pack(output ?? new TModel());
         }
 
-        private static async Task HandleTopicEvent<TRequest, TModel>(TopicEventRequest request, Func<TRequest, Task<TModel>> handler)
+        private static async Task HandleTopicEvent<TRequest>(TopicEventRequest request, Func<TRequest, Task> handler)
             where TRequest : IMessage, new()
-            where TModel : IMessage, new()
         {
             var input = JsonSerializer.Deserialize<TRequest>(request.Data.ToStringUtf8(), jsonOptions);
             await handler(input);

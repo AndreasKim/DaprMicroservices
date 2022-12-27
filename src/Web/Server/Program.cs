@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
 // Add services to the container.
-builder.Services.AddApplication();
+builder.Services.AddApplication(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllersWithViews(); 
 //builder.Services.AddMediatR(typeof(Services.ProductsService.ProductsService));

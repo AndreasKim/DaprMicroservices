@@ -28,15 +28,7 @@ message CreateProductRequest {
    string Thumbnail = 8;
 }
 message DeleteProductRequest {
-   string Description = 1;
-   int32 Id = 2;
-   bool Individualized = 3;
-   string MainCategory = 4;
-   string Name = 5;
-   double Price = 6;
-   int32 SalesInfoId = 7;
-   string SubCategory = 8;
-   string Thumbnail = 9;
+   int32 Id = 1;
 }
 message UpdateProductRequest {
    string Description = 1;

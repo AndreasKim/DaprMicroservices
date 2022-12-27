@@ -1,11 +1,8 @@
 using Core.Application;
 using Core.Infrastructure;
-using Man.Dapr.Sidekick;
-using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
-using Services.ProductsService.Protos;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,22 +18,16 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services
     .AddApplication(Assembly.GetExecutingAssembly())
     .AddInfrastructure<ApplicationDbContext>(builder.Configuration, typeof(EfRepository<>))
-    //.AddAutoMapper(Assembly.GetExecutingAssembly())
-    .AddMediatR(typeof(Program))
+    .AddService(builder.Configuration)    
     .AddEndpointsApiExplorer()
-.AddControllers();
-
-builder.Services.AddDaprClient();
-builder.Services.AddDaprSidekick(builder.Configuration, p => p.Sidecar = new DaprSidecarOptions() { AppProtocol = "grpc", AppId = "productsservice" });
-builder.Services.AddGrpc();
-
+    .AddControllers();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //Protogen.Generate();
+    app.MapGrpcReflectionService();
 }
 
 app.UseRouting();
@@ -44,7 +35,6 @@ app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGrpcService<ProductsService>();
-
     endpoints.MapGet("/", async context =>
     {
         await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
