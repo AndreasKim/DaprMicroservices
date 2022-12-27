@@ -20,12 +20,6 @@ public record UpdateProductCommand : IRequest<Product>, IMapTo<Product>
     public string? Thumbnail { get; set; }
     public double Price { get; set; }
     public int SalesInfoId { get; set; }
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<UpdateProductCommand, Product>()
-            .ForMember(src => src.Thumbnail, opt => opt.MapFrom(dest => new Uri(dest.Thumbnail)))
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-    }
 }
 
 public class UpdateProductCommandHandler : UpdateCommandHandler<Product, UpdateProductCommand>

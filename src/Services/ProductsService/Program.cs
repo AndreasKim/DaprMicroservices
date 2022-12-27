@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
 using Services.ProductsService.Protos;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,29 +19,24 @@ builder.WebHost.ConfigureKestrel(options =>
 
 // Add services to the container.
 builder.Services
-    .AddApplication() 
+    .AddApplication(Assembly.GetExecutingAssembly())
     .AddInfrastructure<ApplicationDbContext>(builder.Configuration, typeof(EfRepository<>))
+    //.AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddMediatR(typeof(Program))
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
 .AddControllers();
 
-builder.Services.AddDaprSidekick(builder.Configuration, p => p.Sidecar = new DaprSidecarOptions() { AppProtocol = "grpc", AppId = "productsservice" });
-//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-//builder.Services.AddCodeFirstGrpc();
-builder.Services.AddGrpc();
-//builder.Services.AddHostedService<ProductsService>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDaprClient();
+builder.Services.AddDaprSidekick(builder.Configuration, p => p.Sidecar = new DaprSidecarOptions() { AppProtocol = "grpc", AppId = "productsservice" });
+builder.Services.AddGrpc();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    Protogen.Generate();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //Protogen.Generate();
 }
 
 app.UseRouting();
@@ -55,10 +51,7 @@ app.UseEndpoints(endpoints =>
     });
 });
 
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();

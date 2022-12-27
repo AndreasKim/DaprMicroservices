@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Application.Commands;
+using Core.Application.Helpers;
 using Core.Application.Mappings;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,18 +10,14 @@ namespace Core.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, Assembly assembly)
         {
-            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            MapperConfiguration mapperConfiguration = new MapperConfiguration(mapperConfig =>
-            {
-                mapperConfig.AddProfile<MappingProfile>();
-            });
-            services.AddSingleton(mapperConfiguration.CreateMapper());
-
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), assembly);
+            services.AddMediatR(Assembly.GetExecutingAssembly(), assembly);
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+            Protogen.Generate(assembly);
 
             return services;
         }

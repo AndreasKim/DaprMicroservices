@@ -1,4 +1,5 @@
-﻿using Core.Application.Attributes;
+﻿using AutoMapper;
+using Core.Application.Attributes;
 using Core.Application.Models;
 using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
@@ -19,6 +20,7 @@ namespace Services.ProductsService
 
         private readonly ILogger<ProductsService> _logger;
         private readonly ISender _sender;
+        private readonly IMapper _mapper;
         private readonly DaprClient _daprClient;
 
         /// <summary>
@@ -26,27 +28,32 @@ namespace Services.ProductsService
         /// </summary>
         /// <param name="daprClient"></param>
         /// <param name="logger"></param>
-        public ProductsService(DaprClient daprClient, ILogger<ProductsService> logger, ISender sender) : base(logger)
+        public ProductsService(DaprClient daprClient, ILogger<ProductsService> logger, ISender sender, IMapper mapper) : base(logger)
         {
             _daprClient = daprClient;
             _logger = logger;
             _sender = sender;
+            _mapper = mapper;
         }
 
         [GrpcEndpoint("createproduct")]
         public async Task<Int32Value> CreateProduct(CreateProductRequest request, ServerCallContext context)
-        {         
-            var prod = await _sender.Send(new CreateProductCommand() { Name = request.Name, Description = request.Description }); 
+        {
+            var command = _mapper.Map<CreateProductCommand>(request);
+
+            var prod = await _sender.Send(command); 
             return new Int32Value() { Value = prod.Id }; 
         }
 
         [GrpcEndpoint("getproduct")]
         public async Task<GetProductByIdResponse> GetProduct(GetProductByIdRequest request, ServerCallContext context)
         {
-            if(request.Id == null) throw new ArgumentNullException(nameof(request.Id));
+            var query = _mapper.Map<GetProductByIdQuery>(request);
 
-            var prod = await _sender.Send(new GetProductByIdQuery() {  Id = (int)request.Id });
-            return new GetProductByIdResponse() { Id = prod.Id, Description = prod.Description, Name = prod.Name };
+            var prod = await _sender.Send(query);
+
+            var response = _mapper.Map<GetProductByIdResponse>(prod);
+            return response;
         }
 
         //[PubSubEndpoint("withdraw")]

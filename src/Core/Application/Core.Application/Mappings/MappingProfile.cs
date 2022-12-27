@@ -2,6 +2,8 @@ using System.Reflection;
 using System.Windows.Input;
 using AutoMapper;
 using Core.Application.Interfaces;
+using Core.Application.Mappings.Converters;
+using Core.Domain.Entities;
 using Google.Api;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
@@ -18,6 +20,7 @@ public class MappingProfile : Profile
             ApplyMappingsFromAssembly(assembly);
         }
 
+        CreateMap<string, Uri>().ConvertUsing<StringToUriConverter>();
     }
 
     private void ApplyMappingsFromAssembly(Assembly assembly)

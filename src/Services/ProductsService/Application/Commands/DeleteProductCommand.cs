@@ -21,11 +21,6 @@ public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
     public double Price{ get; set; }
     public int SalesInfoId { get; set; }
 
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<DeleteProductCommand, Product>()
-            .ForMember(src => src.Thumbnail, opt => opt.MapFrom(dest => new Uri(dest.Thumbnail)));
-    }
 }
 
 public class DeleteProductCommandHandler : DeleteCommandHandler<Product, DeleteProductCommand>

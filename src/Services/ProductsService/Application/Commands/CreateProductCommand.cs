@@ -19,13 +19,6 @@ public record CreateProductCommand : IRequest<Product>, IMapTo<Product>
     public string? Thumbnail { get; set; }
     public double Price { get; set; }
     public int SalesInfoId { get; set; }
-
-    public void Mapping(Profile profile)
-    {
-        profile
-            .CreateMap<CreateProductCommand, Product>()
-            .ForMember(src => src.Thumbnail, opt => opt.MapFrom(dest => new Uri(dest.Thumbnail)));
-    }
 }
 
 public class CreateProductCommandHandler : CreateCommandHandler<Product, CreateProductCommand>
