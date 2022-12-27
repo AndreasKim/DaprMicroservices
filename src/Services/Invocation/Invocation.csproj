@@ -18,9 +18,7 @@
 	<ItemGroup>
 		<PackageReference Include="Dapr.Client" Version="1.9.0" />
 		<PackageReference Include="Google.Protobuf" Version="3.15.0" />
-		<PackageReference Include="Google.Api.CommonProtos" Version="2.2.0" />
 		<PackageReference Include="Grpc.Tools" Version="2.47.0" PrivateAssets="All" />
-		<PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.2.1" />
 	</ItemGroup>
 	
 	<ItemGroup>

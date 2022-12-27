@@ -1,11 +1,6 @@
-using System.Reflection;
-using System.Windows.Input;
 using AutoMapper;
-using Core.Application.Interfaces;
 using Core.Application.Mappings.Converters;
-using Core.Domain.Entities;
-using Google.Api;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.Reflection;
 
 namespace Core.Application.Mappings;
 
