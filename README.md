@@ -1,6 +1,7 @@
 # DaprMicroservices
 
-Sample project to show the usage of Dapr microservices with Grpc and Clean Architecture.
+Sample project to show the usage of Dapr microservices with Grpc and Clean Architecture.  
+
 In order to run the project first install dapr (https://docs.dapr.io/getting-started/install-dapr-cli/)
 
 
