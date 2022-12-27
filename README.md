@@ -17,6 +17,7 @@ In the following you can normally start the project in Visual Studio. The Dapr s
 
 ### Backend
 - Ardalis.Specification
+- Ardalis.Specification.EntityFrameworkCore
 - Microsoft.EntityFrameworkCore
 - Grpc
 - Dapr.AspNetCore
