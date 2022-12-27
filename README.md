@@ -18,8 +18,8 @@ In the following you can normally start the project in Visual Studio. The Dapr s
 ### Backend
 - Ardalis.Specification
 - Microsoft.EntityFrameworkCore
-- Dapr.AspNetCore
 - Grpc
+- Dapr.AspNetCore
 - Man.Dapr.Sidekick.AspNetCore
 - FluentValidation
 - AutoMapper
