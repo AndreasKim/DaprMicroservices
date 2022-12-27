@@ -14,3 +14,13 @@ In the following you can normally start the project in Visual Studio. The Dapr s
 ## Project Structure
 
 ![grafik](https://user-images.githubusercontent.com/106377614/209716594-81106af8-4d0f-49e0-89bc-044ad229cdd2.png)
+
+### Backend
+- Ardalis.Specification
+- Microsoft.EntityFrameworkCore
+- Dapr.AspNetCore
+- Grpc
+- Man.Dapr.Sidekick.AspNetCore
+- FluentValidation
+- AutoMapper
+- MediatR
