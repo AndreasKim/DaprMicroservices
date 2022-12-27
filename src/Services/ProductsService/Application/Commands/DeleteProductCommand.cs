@@ -11,7 +11,7 @@ namespace Services.ProductsService.Application.Commands;
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 public record DeleteProductCommand : IRequest<Product>, IMapTo<Product>
 {   
-    public int Id { get; set; }
+    public int Id { get; init; }
 }
 
 public class DeleteProductCommandHandler : DeleteCommandHandler<Product, DeleteProductCommand>

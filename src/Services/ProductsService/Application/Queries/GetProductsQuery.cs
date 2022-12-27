@@ -11,12 +11,12 @@ namespace Services.ProductsService.Application.Queries;
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 public record GetProductsQuery : IRequest<List<Product>>, IMapTo<ProductsFilter>
 {
-    public int Amount { get; set; }
-    public bool IsTrending { get; set; }
-    public string? City { get; set; }
-    public string? SubCategory { get; set; }
-    public int ActivePage { get; set; }
-    public int ProductsPerPage { get; set; }
+    public int Amount { get; init; }
+    public bool IsTrending { get; init; }
+    public string? City { get; init; }
+    public string? SubCategory { get; init; }
+    public int ActivePage { get; init; }
+    public int ProductsPerPage { get; init; }
 }
 
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Product>>

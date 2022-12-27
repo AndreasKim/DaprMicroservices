@@ -14,10 +14,6 @@ namespace Core.Application.Models
     public class DaprBaseService : AppCallback.AppCallbackBase
     {
         private const string PUBSUBNAME = "pubsub";
-        /// <summary>
-        /// State store name.
-        /// </summary>
-        public const string StoreName = "statestore";
 
         private readonly ILogger<DaprBaseService> _logger;
 
@@ -125,6 +121,7 @@ namespace Core.Application.Models
             {
                 if (TopicEventHandlers.TryGetValue(request.Topic, out var handler))
                 {
+                    _logger.LogInformation($"Incoming pubsub request for: {request.Topic}");
                     await handler.Invoke(request, context);
                 }
                 else { throw new ArgumentException("Event topic is not defined"); }

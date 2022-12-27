@@ -11,9 +11,9 @@ namespace Services.ProductsService.Application.Queries;
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 public record GetProductByIdQuery : IRequest<GetProductByIdDto>, IMapTo<ProductFilter>
 {
-    public int Id { get; set; }
-    public bool IncludeSalesInfo { get; set; }
-    public bool IncludeRatings { get; set; }
+    public int Id { get; init; }
+    public bool IncludeSalesInfo { get; init; }
+    public bool IncludeRatings { get; init; }
 }
 
 

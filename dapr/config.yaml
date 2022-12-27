@@ -3,6 +3,13 @@ kind: Configuration
 metadata:
   name: daprConfig
 spec:
+  mtls:
+    enabled: true
+    workloadCertTTL: "24h"
+    allowedClockSkew: "15m"
+  features:
+    - name: enable-app-health-check
+      enabled: true
   tracing:
     samplingRate: "1"
     zipkin:

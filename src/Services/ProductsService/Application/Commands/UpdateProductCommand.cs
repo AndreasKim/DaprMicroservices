@@ -11,15 +11,15 @@ namespace Services.ProductsService.Application.Commands;
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 public record UpdateProductCommand : IRequest<Product>, IMapTo<Product>
 {
-    public int Id { get; set; }
-    public string? MainCategory { get; set; }
-    public string? SubCategory { get; set; }
-    public bool Individualized { get; set; }
-    public string? Name { get; set; }
-    public string? Description { get; set; }
-    public string? Thumbnail { get; set; }
-    public double Price { get; set; }
-    public int SalesInfoId { get; set; }
+    public int Id { get; init; }
+    public string? MainCategory { get; init; }
+    public string? SubCategory { get; init; }
+    public bool Individualized { get; init; }
+    public string? Name { get; init; }
+    public string? Description { get; init; }
+    public string? Thumbnail { get; init; }
+    public double Price { get; init; }
+    public int SalesInfoId { get; init; }
 }
 
 public class UpdateProductCommandHandler : UpdateCommandHandler<Product, UpdateProductCommand>

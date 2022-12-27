@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.Application.Attributes;
 using Core.Application.Models;
-using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
@@ -16,16 +15,14 @@ namespace Services.ProductsService
         private readonly ILogger<ProductsService> _logger;
         private readonly ISender _sender;
         private readonly IMapper _mapper;
-        private readonly DaprClient _daprClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="daprClient"></param>
         /// <param name="logger"></param>
-        public ProductsService(DaprClient daprClient, ILogger<ProductsService> logger, ISender sender, IMapper mapper) : base(logger)
+        public ProductsService(ILogger<ProductsService> logger, ISender sender, IMapper mapper) : base(logger)
         {
-            _daprClient = daprClient;
             _logger = logger;
             _sender = sender;
             _mapper = mapper;

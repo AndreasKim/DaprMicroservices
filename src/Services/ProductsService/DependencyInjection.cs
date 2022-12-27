@@ -8,7 +8,8 @@ namespace Core.Infrastructure
         {
             services.AddDaprClient();
             services.AddDaprSidekick(configuration, p => p.Sidecar = 
-                new DaprSidecarOptions() { AppProtocol = "grpc", AppId = "productsservice", ComponentsDirectory = "..\\..\\..\\dapr\\components" });
+                new DaprSidecarOptions() { AppProtocol = "grpc", AppId = "productsservice", 
+                    ComponentsDirectory = "..\\..\\..\\dapr\\components", ConfigFile= "..\\..\\..\\dapr"});
 
             services.AddGrpc();
             services.AddGrpcReflection();

@@ -1,0 +1,60 @@
+apiVersion: dapr.io/v1alpha1
+kind: Resiliency
+metadata:
+  name: daprMicroservicesResiliency
+
+spec:
+  policies:
+
+   
+    timeouts:
+      # Global Timeout Policy
+      DefaultTimeoutPolicy: 5s
+      important: 60s
+      largeResponse: 10s
+
+    retries:
+      # Global Retry Policy
+      DefaultRetryPolicy:
+        policy: constant
+        duration: 1s
+        maxRetries: 3
+
+      pubsubRetry:
+        policy: constant
+        duration: 5s
+        maxRetries: 10
+
+      important:
+        policy: constant
+        duration: 5s
+        maxRetries: 20
+
+      largeResponse:
+        policy: constant
+        duration: 5s
+        maxRetries: 3
+
+    circuitBreakers:
+      # Global CircuitBreaker Policy
+      DefaultCircuitBreakerPolicy:
+        maxRequests: 1
+        timeout: 30s 
+        trip: consecutiveFailures >= 5
+
+      pubsubCB:
+        maxRequests: 1
+        interval: 8s
+        timeout: 45s
+        trip: consecutiveFailures > 8
+
+  targets:
+    components:
+      pubsub:
+        outbound:
+          retry: pubsubRetry
+          circuitBreaker: pubsubCB
+        inbound: # inbound only applies to delivery from sidecar to app
+          timeout: DefaultTimeoutPolicy
+          retry: important
+          circuitBreaker: pubsubCB
