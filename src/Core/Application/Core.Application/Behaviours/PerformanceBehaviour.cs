@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Core.Application.Interfaces;
 using MediatR;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Behaviours;
 
@@ -45,7 +45,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                 userName = await _identityService.GetUserNameAsync(userId);
             }
 
-            _logger.Warning("Core Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+            _logger.LogWarning("Core Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                 requestName, elapsedMilliseconds, userId, userName, request);
         }
 

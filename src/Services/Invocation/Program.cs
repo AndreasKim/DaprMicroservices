@@ -22,7 +22,8 @@ namespace Samples.Client
     {
 
         static async Task<int> Main(string[] args)
-        {
+        {            
+            await Task.Delay(10000);
             for (int i = 0; i < 10; i++)
             {
                 await Task.Delay(1000);
@@ -34,7 +35,6 @@ namespace Samples.Client
 
         private static async Task TestCrud()
         {
-            await Task.Delay(10000);
             var client = new DaprClientBuilder().Build();
 
             var deposit = new CreateProductRequest() { Name = "TestName", Description = "TestDescription" };
@@ -71,6 +71,7 @@ namespace Samples.Client
             var deletedProd = await client.InvokeMethodGrpcAsync<GetProductByIdRequest, GetProductByIdResponse>
                 ("productsservice", "getproduct", new GetProductByIdRequest() { Id = product.Id, IncludeRatings = false, IncludeSalesInfo = false }, new CancellationToken());
             Console.WriteLine(deletedProd.Id);
+            Console.WriteLine();
         }
     }
 }

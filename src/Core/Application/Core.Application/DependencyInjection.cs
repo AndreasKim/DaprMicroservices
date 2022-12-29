@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Core.Application.Behaviours;
 using Core.Application.Commands;
 using Core.Application.Helpers;
-using Core.Application.Mappings;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -14,8 +15,9 @@ namespace Core.Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly(), assembly);
             services.AddMediatR(Assembly.GetExecutingAssembly(), assembly);
+            services.AddValidatorsFromAssembly(assembly);
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             Protogen.Generate(assembly);
 

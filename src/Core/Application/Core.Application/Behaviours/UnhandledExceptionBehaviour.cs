@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Application.Behaviours;
 
@@ -22,7 +22,7 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         {
             var requestName = typeof(TRequest).Name;
 
-            _logger.Error(ex, "Core Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+            _logger.LogError(ex, "Core Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
 
             throw;
         }

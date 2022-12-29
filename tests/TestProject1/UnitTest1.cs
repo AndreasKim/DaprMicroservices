@@ -11,12 +11,12 @@ namespace TestProject1
         [Fact]
         public void Test1()
         {
-            var services = new ServiceCollection();
-            services.AddApplication();
+            //var services = new ServiceCollection();
+            //services.AddApplication();
 
-            var serviceProvider = services.BuildServiceProvider();
+            //var serviceProvider = services.BuildServiceProvider();
 
-            var sender = serviceProvider.GetService<ISender>();
+            //var sender = serviceProvider.GetService<ISender>();
             //var result = sender.Send(new CreateProductCommand()).Result;
         }
     }
