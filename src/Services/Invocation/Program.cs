@@ -14,19 +14,16 @@
 using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
 using Services.ProductsService.Generated;
-using static System.Net.Mime.MediaTypeNames;
-
 namespace Samples.Client
 {
     class Program
     {
 
         static async Task<int> Main(string[] args)
-        {            
+        {
             await Task.Delay(10000);
             for (int i = 0; i < 10; i++)
             {
-                await Task.Delay(1000);
                 await TestCrud();
             }
 

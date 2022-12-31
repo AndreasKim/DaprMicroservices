@@ -6,8 +6,10 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
+using Serilog.Context;
 
 namespace Core.Application.Models
 {
@@ -16,15 +18,18 @@ namespace Core.Application.Models
         private const string PUBSUBNAME = "pubsub";
 
         private readonly ILogger<DaprBaseService> _logger;
+        private readonly ActivitySource _daprActivity;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="daprClient"></param>
         /// <param name="logger"></param>
-        public DaprBaseService(ILogger<DaprBaseService> logger)
+        public DaprBaseService(ILogger<DaprBaseService> logger, ActivitySource daprActivity)
         {
             _logger = logger;
+            _daprActivity = daprActivity;
+
             InitializeEndpoints();
         }
 
@@ -97,7 +102,12 @@ namespace Core.Application.Models
         public override async Task<InvokeResponse> OnInvoke(InvokeRequest request, ServerCallContext context)
         {
             var response = new InvokeResponse();
-            _logger.LogInformation($"Incoming invoke request for: {request.Method}");
+
+            var jobId = Log("Incoming invoke request for: {Method}", request.Method);
+
+            using var activity = _daprActivity.StartActivity($"{nameof(DaprBaseService)}/ProcessInvoke");
+            activity!.AddTag("JobId", jobId);
+
             if (InvokeHandlers.TryGetValue(request.Method, out var handler))
             {
                 await handler.Invoke(request, context, response);
@@ -121,7 +131,11 @@ namespace Core.Application.Models
             {
                 if (TopicEventHandlers.TryGetValue(request.Topic, out var handler))
                 {
-                    _logger.LogInformation($"Incoming pubsub request for: {request.Topic}");
+                    var jobId = Log("Incoming pubsub request for: {Topic}", request.Topic);
+
+                    using var activity = _daprActivity.StartActivity($"{nameof(DaprBaseService)}/ProcessPubSub");
+                    activity!.AddTag("JobId", jobId);
+
                     await handler.Invoke(request, context);
                 }
                 else { throw new ArgumentException("Event topic is not defined"); }
@@ -148,6 +162,16 @@ namespace Core.Application.Models
                 PubsubName = PUBSUBNAME,
                 Topic = topic
             });
+        }
+
+        private string Log(string message, params string[] args)
+        {
+            var jobId = Guid.NewGuid().ToString();
+            using (LogContext.PushProperty("JobId", jobId))
+            {
+                _logger.LogInformation(message, args);
+            }
+            return jobId;
         }
 
         private static async Task HandleIOStream<TRequest, TModel>(InvokeRequest request, InvokeResponse response,

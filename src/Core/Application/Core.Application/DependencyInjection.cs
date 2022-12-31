@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Core.Application.Behaviours;
-using Core.Application.Commands;
+﻿using Core.Application.Behaviours;
 using Core.Application.Helpers;
 using FluentValidation;
 using MediatR;

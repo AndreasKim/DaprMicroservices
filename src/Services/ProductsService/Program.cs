@@ -7,18 +7,16 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    // Setup a HTTP/2 endpoint without TLS.
-    options.ListenLocalhost(5050, o => o.Protocols =
-        HttpProtocols.Http2);
-});
+builder
+    .AddKestrel()
+    .AddCustomSerilog()
+    .AddOpenTelemetryDep();
 
 // Add services to the container.
 builder.Services
     .AddApplication(Assembly.GetExecutingAssembly())
     .AddInfrastructure<ApplicationDbContext>(builder.Configuration, typeof(EfRepository<>))
-    .AddService(builder.Configuration)    
+    .AddServiceDependencies(builder.Configuration)    
     .AddEndpointsApiExplorer()
     .AddControllers();
 

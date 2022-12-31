@@ -7,6 +7,7 @@ using MediatR;
 using Services.ProductsService.Application.Commands;
 using Services.ProductsService.Application.Queries;
 using Services.ProductsService.Generated;
+using System.Diagnostics;
 
 namespace Services.ProductsService
 {
@@ -21,7 +22,8 @@ namespace Services.ProductsService
         /// </summary>
         /// <param name="daprClient"></param>
         /// <param name="logger"></param>
-        public ProductsService(ILogger<ProductsService> logger, ISender sender, IMapper mapper) : base(logger)
+        public ProductsService(ILogger<ProductsService> logger, ISender sender, 
+            IMapper mapper, ActivitySource serviceActivity) : base(logger, serviceActivity)
         {
             _logger = logger;
             _sender = sender;
