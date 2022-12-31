@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Application.Interfaces;
-using Core.Domain.Entities;
 using MediatR;
 
 namespace Core.Application.Commands
