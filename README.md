@@ -30,3 +30,5 @@ The autogeneration is flagged by IRequest<> and IResponse.
 - FluentValidation
 - AutoMapper
 - MediatR
+- OpenTelemtry
+- Serilog
