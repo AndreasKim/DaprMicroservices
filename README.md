@@ -32,3 +32,19 @@ The autogeneration is flagged by IRequest<> and IResponse.
 - MediatR
 - OpenTelemtry
 - Serilog
+
+
+### Benchmark
+Job=MediumRun  
+Toolchain=InProcessNoEmitToolchain  
+IterationCount=15  
+LaunchCount=2 
+WarmupCount=10
+
+Request:  
+== IntList == Total size in byte: 2160  
+== StrList == Total size in byte: 4140  
+
+|                  Method |     Mean |     Error |    StdDev |
+|------------------------ |---------:|----------:|----------:|
+| SendHugeRequestToServer | 1.401 ms | 0.1815 ms | 0.2716 ms |
