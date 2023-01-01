@@ -11,10 +11,12 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 
+using BenchmarkDotNet.Running;
 using Dapr.Client;
 using Google.Protobuf.WellKnownTypes;
 using Services.ProductsService.Generated;
-namespace Samples.Client
+
+namespace Invocation
 {
     class Program
     {
@@ -22,6 +24,10 @@ namespace Samples.Client
         static async Task<int> Main(string[] args)
         {
             await Task.Delay(10000);
+
+            BenchmarkRunner.Run<BenchmarkGrpc>();
+
+            await Task.Delay(5000);
             for (int i = 0; i < 10; i++)
             {
                 await TestCrud();

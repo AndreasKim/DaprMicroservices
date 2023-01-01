@@ -65,5 +65,19 @@ namespace Services.ProductsService
 
             await _sender.Send(query);
         }
+
+        [GrpcEndpoint("performancetesthuge")]
+        public async Task<PerformanceTestResponse> TestPerformanceHuge(PerformanceTestRequest request, ServerCallContext context)
+        {
+            var command = _mapper.Map<PerformanceTestCommand>(request);
+
+            var prod = await _sender.Send(command);
+
+            var response = new PerformanceTestResponse();
+            response.IntList.AddRange(prod.IntList);
+            response.StringList.AddRange(prod.StringList);
+
+            return response;
+        }
     }
 }

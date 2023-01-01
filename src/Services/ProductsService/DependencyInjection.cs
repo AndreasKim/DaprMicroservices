@@ -19,9 +19,14 @@ namespace Core.Infrastructure
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDaprClient();
-            services.AddDaprSidekick(configuration, p => p.Sidecar = 
-                new DaprSidecarOptions() { AppProtocol = "grpc", AppId = AppId, 
-                    ComponentsDirectory = "..\\..\\..\\dapr\\components", ConfigFile= "..\\..\\..\\dapr"});
+            services.AddDaprSidekick(configuration, p => p.Sidecar =
+                new DaprSidecarOptions()
+                {
+                    AppProtocol = "grpc",
+                    AppId = AppId,
+                    ComponentsDirectory = "..\\..\\..\\dapr\\components",
+                    ConfigFile = "..\\..\\..\\dapr"
+                });
 
             services.AddGrpc();
             services.AddGrpcReflection();

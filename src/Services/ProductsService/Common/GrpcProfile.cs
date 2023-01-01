@@ -3,6 +3,7 @@ using AutoMapper;
 using Services.ProductsService.Generated;
 using Services.ProductsService.Application.Queries;
 using Services.ProductsService.Application.Commands;
+using Core.Domain.Entities;
 
 namespace Services.ProductsService.Protos;
 
@@ -14,7 +15,9 @@ public class GrpcProfile : Profile
 		CreateMap<GetProductsRequest,GetProductsQuery>();
 		CreateMap<CreateProductRequest,CreateProductCommand>();
 		CreateMap<DeleteProductRequest,DeleteProductCommand>();
+		CreateMap<PerformanceTestRequest,PerformanceTestCommand>();
 		CreateMap<UpdateProductRequest,UpdateProductCommand>();
+		CreateMap<PerformanceTestDto,PerformanceTestResponse>();
 		CreateMap<GetProductByIdDto,GetProductByIdResponse>();
 	}
 }

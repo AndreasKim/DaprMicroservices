@@ -30,6 +30,10 @@ message CreateProductRequest {
 message DeleteProductRequest {
    int32 Id = 1;
 }
+message PerformanceTestRequest {
+   repeated int32 IntList = 1 [packed = false];
+   repeated string StringList = 2;
+}
 message UpdateProductRequest {
    string Description = 1;
    int32 Id = 2;
@@ -43,6 +47,10 @@ message UpdateProductRequest {
 }
 
 // Responses
+message PerformanceTestResponse {
+   repeated int32 IntList = 1 [packed = false];
+   repeated string StringList = 2;
+}
 message GetProductByIdResponse {
    string Description = 1;
    int32 Id = 2;
