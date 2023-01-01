@@ -51,7 +51,7 @@ namespace Core.Infrastructure
             return builder;
         }
 
-        public static WebApplicationBuilder AddOpenTelemetryDep(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder builder)
         {
             var meter = new Meter(AppId);
             var counter = meter.CreateCounter<long>("app.request-counter");

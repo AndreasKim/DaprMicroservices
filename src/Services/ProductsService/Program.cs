@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder
     .AddKestrel()
     .AddCustomSerilog()
-    .AddOpenTelemetryDep();
+    .AddOpenTelemetry();
 
 // Add services to the container.
 builder.Services
