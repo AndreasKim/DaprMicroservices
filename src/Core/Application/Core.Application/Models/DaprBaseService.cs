@@ -39,14 +39,14 @@ namespace Core.Application.Models
             foreach (var endpoint in endpoints)
             {
                 var endpointInfo = endpoint.GetCustomAttribute<GrpcEndpoint>();
-                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddInvokeHandler), endpointInfo.Name);
+                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddInvokeHandler), endpointInfo!.Name);
             }
 
             var pubSubEndpoints = GetType().GetMethods().Where(p => p.Has<PubSubEndpoint>());
             foreach (var endpoint in pubSubEndpoints)
             {
                 var endpointInfo = endpoint.GetCustomAttribute<PubSubEndpoint>();
-                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddTopicEvent), endpointInfo.Name);
+                CreateHandlerMapping<GrpcEndpoint>(endpoint, nameof(AddTopicEvent), endpointInfo!.Name);
             }
         }
 
@@ -63,7 +63,8 @@ namespace Core.Application.Models
             var funcType = typeof(Func<,,>).MakeGenericType(arguments);
             var funcDelegate = endpoint.CreateDelegate(funcType, this);
 
-            var method = typeof(DaprBaseService).GetMethod(eventType, BindingFlags.Instance | BindingFlags.NonPublic);
+            var method = typeof(DaprBaseService).GetMethod(eventType, BindingFlags.Instance | BindingFlags.NonPublic) 
+                ?? throw new ArgumentException($"Dapr base method of type {nameof(eventType)} is missing.");
             var genericMethod = method.MakeGenericMethod(arguments[0], returnTypeArguments);
             genericMethod.Invoke(this, new object[] { handlerName, funcDelegate });
         }
@@ -188,7 +189,8 @@ namespace Core.Application.Models
         private static async Task HandleTopicEvent<TRequest>(TopicEventRequest request, Func<TRequest, Task> handler)
             where TRequest : IMessage, new()
         {
-            var input = JsonSerializer.Deserialize<TRequest>(request.Data.ToStringUtf8(), jsonOptions);
+            var input = JsonSerializer.Deserialize<TRequest>(request.Data.ToStringUtf8(), jsonOptions)
+                ?? throw new ArgumentException("Input request is empty.");
             await handler(input);
         }
     }

@@ -2,7 +2,7 @@
 {
     public static class CategoryRelations
     {
-        public static string[] GetSubCategories(MainCategory mainCategory) => mainCategory switch
+        public static string[]? GetSubCategories(MainCategory mainCategory) => mainCategory switch
         {
             MainCategory.Digitales => Enum.GetNames(typeof(SubCategoryDigital)),
             MainCategory.Kunst => Enum.GetNames(typeof(SubCategoryArt)),

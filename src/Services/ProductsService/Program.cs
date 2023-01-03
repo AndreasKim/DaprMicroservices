@@ -1,6 +1,5 @@
 using Core.Application;
 using Core.Infrastructure;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
 using System.Reflection;
@@ -25,7 +24,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapGrpcReflectionService();
+    app.MapGrpcReflectionService().WithTopic("pubsub", "updateproduct");
 }
 
 app.UseRouting();

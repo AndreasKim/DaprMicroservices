@@ -14,7 +14,7 @@ public record CreateProductCommand : IRequest<Product>, IMapTo<Product>
     public string? MainCategory { get; init; }
     public string? SubCategory { get; init; }
     public bool Individualized { get; init; }
-    public string? Name { get; init; }
+    public required string Name { get; init; }
     public string? Description { get; init; }
     public string? Thumbnail { get; init; }
     public double Price { get; init; }

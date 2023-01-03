@@ -101,7 +101,7 @@ namespace Core.Application.Helpers
         }
 
         private static string GenerateProtoString(MethodInfo method, StringBuilder builder,
-            Type? type, string pattern, string replacement)
+            Type type, string pattern, string replacement)
         {
             var genericMethod = method.MakeGenericMethod(type);
             var protoOutput = genericMethod.Invoke(null, Array.Empty<object>())
