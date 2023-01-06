@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD8EF746-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invocation", "src\Services\Invocation\Invocation.csproj", "{8C0FDC49-D723-40C7-895B-99C1DAD7994C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "tests\TestProject1\TestProject1.csproj", "{9DA07B73-BC0D-48C6-94DF-5720D67A3577}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsService.E2ETests", "tests\TestProject1\ProductsService.E2ETests.csproj", "{9DA07B73-BC0D-48C6-94DF-5720D67A3577}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{D9FFDA09-B229-438A-B2F7-18C125AA3E66}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,6 +43,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 		dapr\components\resiliency.yaml = dapr\components\resiliency.yaml
 		dapr\components\statestore.yaml = dapr\components\statestore.yaml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductsService", "ProductsService", "{AB7B15A5-0964-4592-8956-97CDA7A07202}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBB8202D-754B-4714-821C-77E2B1BD6466}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{ECFF6BF1-057F-4C3B-9BC9-A6ED18AC0CCA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Tests", "tests\Common\Common.Tests\Common.Tests.csproj", "{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +94,10 @@ Global
 		{9DA07B73-BC0D-48C6-94DF-5720D67A3577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DA07B73-BC0D-48C6-94DF-5720D67A3577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DA07B73-BC0D-48C6-94DF-5720D67A3577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,8 +114,11 @@ Global
 		{6593F106-1C1E-4748-AC74-2B03E5C35600} = {230CBD79-284C-4E47-BF36-CCEC2E317EB2}
 		{38F506A2-DC31-427A-AE68-AEAC485CCD8D} = {230CBD79-284C-4E47-BF36-CCEC2E317EB2}
 		{8C0FDC49-D723-40C7-895B-99C1DAD7994C} = {C7E86839-FEB5-4A2D-AC31-84EEB3DDC86A}
-		{9DA07B73-BC0D-48C6-94DF-5720D67A3577} = {AB2FBC37-6C5C-46B6-9465-6A24082866F1}
+		{9DA07B73-BC0D-48C6-94DF-5720D67A3577} = {AB7B15A5-0964-4592-8956-97CDA7A07202}
 		{D9FFDA09-B229-438A-B2F7-18C125AA3E66} = {FD8EF746-D6FE-465E-8275-011E4FFCD53A}
+		{AB7B15A5-0964-4592-8956-97CDA7A07202} = {AB2FBC37-6C5C-46B6-9465-6A24082866F1}
+		{ECFF6BF1-057F-4C3B-9BC9-A6ED18AC0CCA} = {AB2FBC37-6C5C-46B6-9465-6A24082866F1}
+		{0E0368D8-542C-4FFB-B87F-5D7F4FB4630C} = {ECFF6BF1-057F-4C3B-9BC9-A6ED18AC0CCA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF843B68-B0DF-4AD7-B80F-B1F7A2C49E4D}

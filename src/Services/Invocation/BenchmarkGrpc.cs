@@ -24,7 +24,6 @@ namespace Invocation
                 ("productsservice", "performancetesthuge", request, new CancellationToken());
         }
 
-
         private static List<int> CreateIntList()
         {
             var intList = new List<int>();

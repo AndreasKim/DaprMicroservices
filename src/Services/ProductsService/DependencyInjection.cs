@@ -1,4 +1,11 @@
-﻿using Man.Dapr.Sidekick;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using Core.Application.Models;
+using Man.Dapr.Sidekick;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -6,17 +13,15 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
 using Services.ProductsService;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
 
-namespace Core.Infrastructure
+namespace Services.ProductsService
 {
     public static class DependencyInjection
     {
         public static readonly string AppId = nameof(ProductsService).ToLower();
         public const string ServiceVersion = "1.0.0";
 
-        public static IServiceCollection AddServiceDependencies(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddServiceDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDaprClient();
             services.AddDaprSidekick(configuration, p => p.Sidecar =
@@ -35,17 +40,24 @@ namespace Core.Infrastructure
 
             return services;
         }
+        public static WebApplicationBuilder AddAppSettings(this WebApplicationBuilder builder, out AppSettings settings)
+        {
+            settings = new AppSettings();
+            builder.Configuration.Bind(settings);
+            builder.Services.AddSingleton(settings);
+            return builder;
+        }
 
         public static WebApplicationBuilder AddCustomSerilog(this WebApplicationBuilder builder)
         {
             var config = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
                 .WriteTo.Console()
-                .Enrich.FromLogContext()          
+                .Enrich.FromLogContext()
                 .Enrich.WithProperty("ApplicationId", AppId);
 
             var seqServerUrl = builder.Configuration["SeqServerUrl"];
-            if(!string.IsNullOrWhiteSpace(seqServerUrl))
+            if (!string.IsNullOrWhiteSpace(seqServerUrl))
             {
                 config = config.WriteTo.Seq(seqServerUrl);
             }

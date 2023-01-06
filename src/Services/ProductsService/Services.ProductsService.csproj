@@ -10,7 +10,8 @@
   </PropertyGroup>
 	
   <ItemGroup>
-	<Protobuf Include="Protos\*.proto" ProtoRoot="Protos" GrpcServices="None" />
+    <InternalsVisibleTo Include ="ProductsService.E2ETests"/>
+	  <Protobuf Include="Protos\*.proto" ProtoRoot="Protos" GrpcServices="None" />
   </ItemGroup>
 	
   <ItemGroup>

@@ -1,23 +1,27 @@
-﻿using Core.Application.Interfaces;
-using Core.Application.Models;
-using MediatR;
-using ProtoBuf;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Core.Application.Interfaces;
+using Core.Application.Models;
+using MediatR;
+using ProtoBuf;
 
 namespace Core.Application.Helpers
 {
     public static class Protogen
     {
         [Conditional("DEBUG")]
-        public static void Generate(Assembly assembly) 
+        public static void Generate(Assembly assembly)
         {
             var requestTypes = assembly.GetTypes().Where(p => p.GetInterfaces()
-                .Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequest<>))));     
-            var responseTypes = assembly.GetTypes().Where(p => p.GetInterfaces().Any(i => i == typeof(IResponse)));       
-            
+                .Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequest<>))));
+            var responseTypes = assembly.GetTypes().Where(p => p.GetInterfaces().Any(i => i == typeof(IResponse)));
+
             var method = typeof(Serializer).GetMethods().FirstOrDefault(p => p.IsGenericMethod && p.IsPublic && p.IsStatic && p.Name == "GetProto")
                 ?? throw new ArgumentNullException("GetProto");
 
@@ -29,13 +33,13 @@ namespace Core.Application.Helpers
             builder.AppendLine();
 
             builder.AppendLine("syntax = \"proto3\";");
-            builder.AppendLine($"option csharp_namespace = \"Services.{service.Name}.Generated\";");      
+            builder.AppendLine($"option csharp_namespace = \"Services.{service.Name}.Generated\";");
             builder.AppendLine();
 
             builder.AppendLine("// Requests");
             foreach (var type in requestTypes)
             {
-                var name = GenerateProtoString(method, builder, type, 
+                var name = GenerateProtoString(method, builder, type,
                     @"(message \w*)(Command|Query)( {.*)", @"$1Request$3");
                 mappingDict.Add(name, (type, true));
             }
@@ -92,8 +96,8 @@ namespace Core.Application.Helpers
         private static void WriteToFile(StringBuilder builder, string basePath, string name)
         {
             string path = Path.Combine(basePath, name);
-            if (!Directory.Exists(basePath)) 
-            { 
+            if (!Directory.Exists(basePath))
+            {
                 Directory.CreateDirectory(basePath);
             }
 
@@ -111,7 +115,7 @@ namespace Core.Application.Helpers
 
             protoStr = Regex.Replace(protoStr, pattern, replacement);
             builder.Append(protoStr);
-            
+
             var name = Regex.Match(protoStr, @"message (\w*) {.*").Groups[1].Value;
             return name;
         }

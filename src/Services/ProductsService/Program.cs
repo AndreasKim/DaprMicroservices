@@ -1,21 +1,23 @@
+﻿using System.Reflection;
 using Core.Application;
+using Core.Application.Models;
 using Core.Infrastructure;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder
     .AddKestrel()
+    .AddAppSettings(out var settings)
     .AddCustomSerilog()
     .AddOpenTelemetry();
 
 // Add services to the container.
 builder.Services
     .AddApplication(Assembly.GetExecutingAssembly())
-    .AddInfrastructure<ApplicationDbContext>(builder.Configuration, typeof(EfRepository<>))
-    .AddServiceDependencies(builder.Configuration)    
+    .AddInfrastructure<ApplicationDbContext>(settings, typeof(EfRepository<>))
+    .AddServiceDependencies(builder.Configuration)
     .AddEndpointsApiExplorer()
     .AddControllers();
 
@@ -24,7 +26,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapGrpcReflectionService().WithTopic("pubsub", "updateproduct");
+    app.MapGrpcReflectionService();
 }
 
 app.UseRouting();
