@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Core.Application.Mappings.Converters;
 using System.Reflection;
 
@@ -15,7 +15,7 @@ public class MappingProfile : Profile
             ApplyMappingsFromAssembly(assembly);
         }
 
-        CreateMap<string, Uri>().ConvertUsing<StringToUriConverter>();
+        CreateMap<string, Uri?>().ConvertUsing<StringToUriConverter>();
     }
 
     private void ApplyMappingsFromAssembly(Assembly assembly)

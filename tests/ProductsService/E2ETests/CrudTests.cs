@@ -36,7 +36,7 @@ namespace ProductsService.E2ETests
             await RunTest(async p =>
             {
                 var productId = await p.InvokeMethodGrpcAsync<CreateProductRequest, Int32Value>
-                    ("productsservice", "createproduct", request.Clone(), new CancellationToken());
+                    ("productsservice", "createproduct", request, new CancellationToken());
 
                 productId.Should().NotBeNull();
                 productId.Value.Should().BePositive();
@@ -57,6 +57,7 @@ namespace ProductsService.E2ETests
             var client = new DaprClientBuilder().Build();
 
             testAction(client);
+            await Task.Delay(3000);
             ts.Cancel();
             ts.Dispose();
         }

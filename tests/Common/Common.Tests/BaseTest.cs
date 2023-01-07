@@ -32,6 +32,7 @@ namespace Common.Tests
             var services = new ServiceCollection();
 
             services.AddSingleton(new ActivitySource("Test"));
+            services.AddLogging();
             return services;
         }
 
