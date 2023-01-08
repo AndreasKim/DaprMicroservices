@@ -7,7 +7,7 @@ namespace Core.Domain.Entities
         public MainCategory MainCategory { get; set; }
         public string? SubCategory { get; set; }
         public bool Individualized { get; set; } = true;
-        public string? Name { get; set; }
+        public required string Name { get; set; }
         public string? Description { get; set; }
         public Uri? Thumbnail { get; set; }
         public double Price { get; set; }

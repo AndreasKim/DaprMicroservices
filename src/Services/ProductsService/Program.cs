@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Core.Application;
-using Core.Application.Models;
 using Core.Infrastructure;
 using Services.ProductsService;
 using Services.ProductsService.Infrastructure.Persistence;
@@ -31,13 +30,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
+app.MapGrpcService<ProductsService>();
+app.MapGet("/", async context =>
 {
-    endpoints.MapGrpcService<ProductsService>();
-    endpoints.MapGet("/", async context =>
-    {
-        await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-    });
+    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 });
 
 app.UseHttpsRedirection();

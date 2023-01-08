@@ -26,7 +26,7 @@ namespace ProductsService.UnitTests
             IRepository<Product> repository, [Frozen] Mock<IMapper> mapper)
         {
             mapper.Setup(p => p.Map<Product>(It.IsAny<CreateProductCommand>()))
-                .Returns(new Product() { Id = 1 });
+                .Returns(new Product() { Id = 1, Name = "TestName" });
 
             var handler = new CreateProductCommandHandler(repository, mapper.Object);
             command = command with { MainCategory = "Kunst" };
